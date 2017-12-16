@@ -22,24 +22,33 @@ def bookmark():
 
 # Match exclamation marks and following
 p_exclaim = re.compile('!.')
-# Match all characters between pairs of < and >
-p_bracket = re.compile('<[^>]{0,}>')
-# Match all commas
-p_commas = re.compile(',{1,}')
+# Clean out that text
+cleaned = p_exclaim.sub('',text)
 
-cleaned = p_commas.sub('',p_bracket.sub('',p_exclaim.sub('',text)))
 
 curscore = 1
 runningscore = 0
+garbagescore = 0
+garbage = False
 
 split_cleaned = list(cleaned)
 
 for i in range(len(split_cleaned)):
   curchar = split_cleaned[i]
+  if not garbage and curchar == '<':
+    garbage = True
+    continue
+  if garbage and curchar != '>':
+    garbagescore += 1
+    continue
+  if garbage and curchar == '>':
+    garbage = False
+    continue
   if curchar == '{':
     runningscore += curscore
     curscore += 1
   if curchar == '}':
     curscore -= 1
-    
+
 print("Answer star 1: {}".format(runningscore))
+print("Answer star 2: {}".format(garbagescore))
