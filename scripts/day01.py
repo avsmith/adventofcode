@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-
 data = '''1695
 1157
 1484
@@ -203,19 +202,16 @@ data = '''1695
 1196
 '''
 
-
-
 datai = [int(x) for x in data.splitlines()]
 
 target = 2020
-
 
 def report2(l,t):
   for i in l:
     for j in l:
       if i + j== t:
         return(i*j)
-  
+
 def report3(l,t):
   for i in l:
     for j in l:
@@ -224,5 +220,5 @@ def report3(l,t):
           return(i*j*k)
   
 
-print("Report 2 Answer:", report2(datai,target))
-print("Report 3 Answer:", report3(datai,target))
+print("Report 2 Answer:", report2(datai, target))
+print("Report 3 Answer:", report3(datai, target))
