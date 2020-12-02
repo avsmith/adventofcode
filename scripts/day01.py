@@ -21,5 +21,5 @@ def report3(l,t):
           return(i*j*k)
   
 
-print("Report 2 Answer:", report2(datai, target))
-print("Report 3 Answer:", report3(datai, target))
+print("Part 1 Answer:", report2(datai, target))
+print("Part 2 Answer:", report3(datai, target))
