@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
 import re
+import os, sys
 
-f = open("data/input02.txt")
+f = open(os.path.join(sys.path[0], 'input02.txt'))
 data = f.read()
 
 array = data.splitlines()

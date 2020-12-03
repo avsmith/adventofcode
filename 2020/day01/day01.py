@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
-f = open("data/input01.txt")
+import os, sys
+
+f = open(os.path.join(sys.path[0], 'input01.txt'))
 data = f.read()
 
 datai = [int(x) for x in data.splitlines()]
