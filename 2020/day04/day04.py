@@ -31,28 +31,33 @@ eyecols = ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth']
 valid = 0 
 good = 0
 
+def check_validity(it):
+  if int(it['byr']) < 1920 or int(it['byr']) > 2002:
+    return 0
+  if int(it['iyr']) < 2010 or int(it['iyr']) > 2020:
+    return 0
+  if int(it['eyr']) < 2020 or int(it['eyr']) > 2030:
+    return 0
+  m = hgtre.match(it['hgt'])
+  if type(m) == type(None):
+    return 0
+  (val, unit) = m.groups()
+  if (unit == 'in' and (int(val) <59 or int(val) > 76)) or (unit == 'cm' and (int(val) <150 or int(val) > 193)):
+    return 0
+  if not hclre.match(it['hcl']):
+    return 0
+  if it['ecl'] not in eyecols:
+    return 0
+  if not pidre.match(it['pid']):
+    return 0
+  return 1
+
 for item in items:
   ret = item.pop('cid',None)
   if len(item) == 7:
     valid += 1
-    if int(item['byr']) < 1920 or int(item['byr']) > 2002:
+    if not check_validity(item):
       continue
-    if int(item['iyr']) < 2010 or int(item['iyr']) > 2020:
-      continue
-    if int(item['eyr']) < 2020 or int(item['eyr']) > 2030:
-      continue
-    m = hgtre.match(item['hgt'])
-    if type(m) == type(None):
-      continue
-    (val, unit) = m.groups()
-    if (unit == 'in' and (int(val) <59 or int(val) > 76)) or (unit == 'cm' and (int(val) <150 or int(val) > 193)):
-      continue
-    if not hclre.match(item['hcl']):
-      continue
-    if item['ecl'] not in eyecols:
-      continue
-    if not pidre.match(item['pid']):
-      continue    
     good += 1
 
 
