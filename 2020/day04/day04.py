@@ -6,6 +6,9 @@ import re
 f = open(os.path.join(sys.path[0], 'input04.txt'))
 data = f.read()
 
+# Convert to list of dick objects
+items = [dict(v.split(':') for v in entry) for entry in [x.replace('\n',' ').split(' ') for x in data.split('\n\n')]]
+
 # Valid data rules:
 # byr (Birth Year) - four digits; at least 1920 and at most 2002.
 # iyr (Issue Year) - four digits; at least 2010 and at most 2020.
@@ -18,17 +21,17 @@ data = f.read()
 # pid (Passport ID) - a nine-digit number, including leading zeroes.
 # cid (Country ID) - ignored, missing or not.
 
-items = [x.replace('\n',' ').split(' ') for x in data.split('\n\n')]
-items = [dict(e.split(':') for e in li) for li in items]
-items2 = [dict(v.split(':') for v in entry) for entry in [x.replace('\n',' ').split(' ') for x in data.split('\n\n')]]
 
-colpat = re.compile("^#[a-f0-9]{6,6}$")
-eyecols = {'amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth'}
-passpat = re.compile("^[0-9]{9,9}$")
+hclre = re.compile(r"^#[a-f0-9]{6,6}$")
+pidre = re.compile(r"^[0-9]{9,9}$")
+hgtre = re.compile(r"(\d+)(in|cm)")
+
+eyecols = ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth']
 
 valid = 0 
 good = 0
-for item in items2:
+
+for item in items:
   ret = item.pop('cid',None)
   if len(item) == 7:
     valid += 1
@@ -38,21 +41,20 @@ for item in items2:
       continue
     if int(item['eyr']) < 2020 or int(item['eyr']) > 2030:
       continue
-    m = re.match(r"(\d+)(in|cm)",item['hgt'])
+    m = hgtre.match(item['hgt'])
     if type(m) == type(None):
       continue
     (val, unit) = m.groups()
     if (unit == 'in' and (int(val) <59 or int(val) > 76)) or (unit == 'cm' and (int(val) <150 or int(val) > 193)):
       continue
-    if not colpat.match(item['hcl']):
+    if not hclre.match(item['hcl']):
       continue
-    if  item['ecl'] not in eyecols:
+    if item['ecl'] not in eyecols:
       continue
-    if not passpat.match(item['pid']):
+    if not pidre.match(item['pid']):
       continue    
     good += 1
 
 
-
-print("Valid 7 fields:", valid)
-print("All data valid:", good)
+print("Part 1 (Valid 7 fields):", valid)
+print("Part 2 (All data valid):", good)
