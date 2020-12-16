@@ -2,6 +2,7 @@
 
 import re
 import os, sys
+import numpy as np
 
 testinput = '''class: 1-3 or 5-7
 row: 6-11 or 33-44
@@ -23,24 +24,29 @@ input = f.read()
 
 (params, ticket, nearby_tix) = input.split("\n\n")
 
-param_set = set()
+param_dict = dict()
 
-paramre = re.compile("^[^:]+: (\d+)-(\d+) or (\d+)-(\d+)") 
+paramre = re.compile("^([^:]+): (\d+)-(\d+) or (\d+)-(\d+)") 
 
 for param in params.splitlines():
   parammatch = paramre.match(param)
-  (x_min, x_max, y_min, y_max) = parammatch.groups()
-  param_set.update(range(int(x_min),int(x_max)+1))
-  param_set.update(range(int(y_min),int(y_max)+1))
+  (ticket_category, x_min, x_max, y_min, y_max) = parammatch.groups()
+  param_dict[ticket_category] =  list(range(int(x_min),int(x_max)+1)) + list(range(int(y_min),int(y_max)+1))
   
 ticketre = re.compile("\d+")
 ticketnums = [int(t) for t in ticketre.findall(ticket)]
+#print(list(param_dict.values()))
 
 error_rate = 0 
+ticket_rules = dict()
+
 for nearby in nearby_tix.splitlines():
   nearby_nums = [int(t) for t in ticketre.findall(nearby)]
-  for near in nearby_nums:
-    if near not in param_set:
-      error_rate += near
-
+  invalid_nums =  np.setdiff1d(nearby_nums,sum(param_dict.values(), []))
+  if len(invalid_nums) > 0:
+    error_rate += sum(invalid_nums)
+  else:
+    pass
+  
+  
 print(error_rate)
