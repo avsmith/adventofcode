@@ -28,7 +28,7 @@ ticket_rules = [[] for _ in range(len(ticketnums))]
 
 for nearby in nearby_tix.splitlines():
   nearby_nums = [int(t) for t in ticketre.findall(nearby)]
-  invalid_nums =  np.setdiff1d(nearby_nums,sum(param_dict.values(), []))
+  invalid_nums =  np.setdiff1d(nearby_nums,list(itertools.chain.from_iterable(param_dict.values())))
   if len(invalid_nums) > 0:
     error_rate += sum(invalid_nums)
   else:
@@ -38,8 +38,6 @@ for nearby in nearby_tix.splitlines():
         ticket_rules[i] = possible_values
       else:
         ticket_rules[i] = list(set(possible_values) & set(ticket_rules[i]))
-
-print ( sum([ len(elem) for elem in ticket_rules]))
 
 while any(len(elem) > 1 for elem in ticket_rules):
   determined_values = set(list(itertools.chain.from_iterable([ticket_rules[i] for i, elem in enumerate(ticket_rules) if len(ticket_rules[i]) == 1])))
