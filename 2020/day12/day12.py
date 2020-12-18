@@ -1,12 +1,5 @@
 #!/usr/bin/env python
 
-testinput='''F10
-N3
-F7
-R90
-F11
-'''
-
 import os, sys
 
 f = open(os.path.join(sys.path[0], 'input12.txt'))
@@ -39,12 +32,12 @@ for item in input.splitlines():
     turns = amount/90
     turn_factor = 1j**(4-turns%4)
     direction *= turn_factor
-    waypoint = waypoint.real*turn_factor + waypoint.imag*turn_factor*1j
+    waypoint *= turn_factor
   elif instruction == 'L':
     turns = amount/90
     turn_factor = 1j**(turns%4)
     direction *= turn_factor
-    waypoint = waypoint.real*turn_factor + waypoint.imag*turn_factor*1j
+    waypoint *= turn_factor
   else:
     raise Error("Ooops")
 
