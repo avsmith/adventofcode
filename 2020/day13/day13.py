@@ -19,7 +19,6 @@ print(first_bus * wait)
 
 part2 = [(i, int(x)) for i, x in enumerate(buses.split(',')) if x != 'x']
 
-
 def find_time(indata):
   time, step = 0, 1
   for mins, bus_id in indata:
