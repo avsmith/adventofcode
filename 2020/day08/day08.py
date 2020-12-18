@@ -22,23 +22,18 @@ tracking = []
 
 for rule in testinput.splitlines():
   (action, amount) = rule.split(' ')
-  tracking.append({'action': action, 'amount': int(amount), 'visited': False})
-
+  tracking.append({'action': action, 'amount': int(amount)})
 
 
 def hand_held(tracker, loop=True):
   pos = 0;
   acc = 0
-#  if loop is not True:
-#    print('here we go')
+  visited = set()
   while True:
-#    print(acc, tracker[pos])
-    if loop is True and tracker[pos]['visited'] is True:
+    if pos in visited and loop is True:
       return(acc)
-    elif tracker[pos]['visited'] is True:
-      raise RecursionError("Program in infinite loop")
     else:
-      tracker[pos]['visited'] = True
+      visited.add(pos)
       if tracker[pos]['action'] == 'jmp':
         pos += tracker[pos]['amount']
       elif tracker[pos]['action'] == 'acc':
@@ -55,21 +50,22 @@ def fix_code(t):
   for i in range(len(t)):
     print( t[i]['action'])
     if t[i]['action'] == 'jmp':
+      tnew = t.deepcopy()
       t[i]['action'] = 'nop'
       pprint.pprint(t)
       print('\n')
-      try:
-        return(hand_held(t, False))
-      except RecursionError:
-        t[i]['action'] = 'jmp'
+      #try:
+      return(hand_held(t, True))
+      #except RecursionError:
+      t[i]['action'] = 'jmp'
     elif t[i]['action'] == 'nop':
       t[i]['action'] = 'jmp'
       pprint.pprint(t)
       print('\n')
-      try:
-        return(hand_held(t, False))
-      except RecursionError:
-        t[i]['action'] = 'nop'
+#      try:
+      return(hand_held(t, True))
+#      except RecursionError:
+      t[i]['action'] = 'nop'
 
 print(hand_held(tracking))
 #print(fix_code(tracking))
