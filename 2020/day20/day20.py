@@ -4,7 +4,9 @@ import os, sys
 import numpy as np
 from itertools import chain
 from collections import deque
+import re
 import copy
+
 
 def reverse_bits(num):
   return(int('0b' + format(num, '#012b')[2:][::-1],2))
@@ -42,7 +44,6 @@ def tile_print(tile, orient, rotate):
     reoriented_tile = np.rot90(tile,rotate)
   elif orient == 'counter':
     reoriented_tile = np.rot90(np.transpose(tile),rotate)
-    print(reoriented_tile)
   ret = list(map(''.join, reoriented_tile[1:-1,1:-1]))
   return(ret)
 
@@ -125,4 +126,39 @@ for i in range(side_size):
         for k in range(rows):
           tile_text[k + i*(rows)] = tile_text[k + i*(rows)] + current_tile_text[k]
 
-print('\n'.join(tile_text))
+#print('\n'.join(tile_text))
+mon1 = '..................#.'
+monstre1 = re.compile(mon1)
+mon2 = '#....##....##....###'
+monstre2 = re.compile(mon2)
+mon3 = '.#..#..#..#..#..#...'
+monstre3 = re.compile(mon3)
+monster = '\n'.join([mon1, mon2, mon3])
+print(monster)
+
+count = 0;
+for i in range(4):
+  t = np.array([list(word) for word in tile_text])
+  tr = list(map(''.join,np.rot90(t,i)))
+  for j in range(1,len(tr)-1):
+    for match in monstre2.finditer(tr[j]):
+      s = match.start()
+      e = match.end()
+#      print ('String match "%s" at %d:%d' % (tr[j][s:e], s, e))
+      if monstre1.fullmatch(tr[j-1],s,e) and monstre3.fullmatch(tr[j+1],s,e):
+        count += 1
+  tt = list(map(''.join,np.rot90(np.transpose(t),i)))
+  for j in range(1,len(tt)-1):
+    for match in monstre2.finditer(tr[j]):
+      s = match.start()
+      e = match.end()
+#      print ('String match "%s" at %d:%d' % (tr[j][s:e], s, e))
+      if monstre1.fullmatch(tt[j-1],s,e) and monstre3.fullmatch(tt[j+1],s,e):
+        count += 1
+
+t = np.array([list(word) for word in tile_text])
+
+tr = list(map(''.join,np.rot90(t,3)))
+trj = '\n'.join(tr)
+print(trj.count('#')-count*monster.count('#'))
+
