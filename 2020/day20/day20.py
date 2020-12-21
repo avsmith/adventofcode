@@ -42,11 +42,11 @@ def tile_print(tile, orient, rotate):
     reoriented_tile = np.rot90(tile,rotate)
   elif orient == 'counter':
     reoriented_tile = np.rot90(np.transpose(tile),rotate)
-  ret = list(map(''.join, reoriented_tile))
-#  print(ret)
-  return(list(map(''.join, reoriented_tile)))
+    print(reoriented_tile)
+  ret = list(map(''.join, reoriented_tile[1:-1,1:-1]))
+  return(ret)
 
-f = open(os.path.join(sys.path[0], 'testinput20.txt'))
+f = open(os.path.join(sys.path[0], 'input20.txt'))
 input = f.read()
 
 tiles = input.split('\n\n')
@@ -91,9 +91,12 @@ for tilenum in tile_bag:
     if num == reverse_bits(num):
       print(f"Tile {tilenum} has ambigous side")
 
-print(np.prod([int(x) for x in tile_bag if tile_bag[x]['type']=='corner']))
+corner_tiles = [int(x) for x in tile_bag if tile_bag[x]['type']=='corner']
 
-cornernum = '1951'
+print(np.prod(corner_tiles))
+
+testcornernum = '1951'
+cornernum = str(corner_tiles[0])
 orient = 'counter'
 side_size = int(len(tile_bag)**0.5)
 all_tiles = []
@@ -112,7 +115,6 @@ for i in range(side_size):
         current_tile= find_tile(all_tiles[pos][1][2], all_tiles[pos][0][0], 0)
         all_tiles.append(current_tile)
         current_tile_text = current_tile[4]
-        tile_text.append('')
         tile_text.extend(current_tile_text)
       else:
         pos = i*side_size + j 
@@ -121,6 +123,6 @@ for i in range(side_size):
         current_tile_text = current_tile[4]
         rows = len(current_tile_text)
         for k in range(rows):
-          tile_text[k + i*(rows+1)] = tile_text[k + i*(rows+1)] + ' ' + current_tile_text[k]
+          tile_text[k + i*(rows)] = tile_text[k + i*(rows)] + current_tile_text[k]
 
 print('\n'.join(tile_text))
