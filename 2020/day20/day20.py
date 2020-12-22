@@ -47,6 +47,12 @@ def tile_print(tile, orient, rotate):
   ret = list(map(''.join, reoriented_tile[1:-1,1:-1]))
   return(ret)
 
+def draw_monster(string, match):
+  for matchnum in range(1,len(match.groups())+1):
+    for matchpos in range(match.start(matchnum),match.end(matchnum)):
+      string = ''.join(['O' if charpos == matchpos else letter for charpos, letter in enumerate(string)])
+  return(string)
+
 f = open(os.path.join(sys.path[0], 'input20.txt'))
 input = f.read()
 
@@ -96,13 +102,11 @@ corner_tiles = [int(x) for x in tile_bag if tile_bag[x]['type']=='corner']
 
 print(np.prod(corner_tiles))
 
-testcornernum = '1951'
 cornernum = str(corner_tiles[0])
 orient = 'counter'
 side_size = int(len(tile_bag)**0.5)
 all_tiles = []
 tile_text = []
-
 
 for i in range(side_size):
   for j in range(side_size):
@@ -126,15 +130,15 @@ for i in range(side_size):
         for k in range(rows):
           tile_text[k + i*(rows)] = tile_text[k + i*(rows)] + current_tile_text[k]
 
-#print('\n'.join(tile_text))
-mon1 = '..................#.'
+
+mon1 = '..................(#).'
 monstre1 = re.compile(mon1)
-mon2 = '#....##....##....###'
+mon2 = '(#)....(##)....(##)....(###)'
 monstre2 = re.compile(mon2)
-mon3 = '.#..#..#..#..#..#...'
+mon3 = '.(#)..(#)..(#)..(#)..(#)..(#)...'
 monstre3 = re.compile(mon3)
 monster = '\n'.join([mon1, mon2, mon3])
-print(monster)
+#print(monster)
 
 count = 0;
 for i in range(4):
@@ -159,6 +163,20 @@ for i in range(4):
 t = np.array([list(word) for word in tile_text])
 
 tr = list(map(''.join,np.rot90(t,3)))
-trj = '\n'.join(tr)
-print(trj.count('#')-count*monster.count('#'))
+print('\n'.join(tr).count('#')-count*monster.count('#'))
+count2 = 0
+for i in range(0,len(tr)-2):
+  for match1 in monstre1.finditer(tr[i]):
+    s = match1.start()
+    e = match1.end()
+    match2 = monstre2.fullmatch(tr[i+1],s,e)
+    match3 = monstre3.fullmatch(tr[i+2],s,e)
+    if match2 and match3:
+      tr[i] = draw_monster(tr[i],match1)
+      tr[i+1] = draw_monster(tr[i+1],match2)
+      tr[i+2] = draw_monster(tr[i+2],match3)
+      count2 += 1
 
+
+print('\n'.join(tr))
+print(count2)
