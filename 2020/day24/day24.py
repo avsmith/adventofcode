@@ -66,25 +66,26 @@ def find_neighbors(pos):
     neighbors.append(pos + dir)
   return(neighbors)
 
-def flip_tiles(positions,n):
+def flip_tiles(blacktiles,n):
   for i in range(n):
-    checktiles = set(positions)
+    checktiles = set(blacktiles)
     newtiles = []
-    for pos in set(positions):
+    for pos in blacktiles:
       checktiles.update(find_neighbors(pos))
     for tile in set(checktiles):
-      blacks = [pos for pos in find_neighbors(tile) if pos in set(positions)]
-      if tile in set(positions) and len(blacks) > 0 and len(blacks) < 3:
-        newtiles.append(tile)
-      elif tile not in set(positions) and len(blacks) == 2:
-        newtiles.append(tile)
-    print(i+1, len(newtiles))
-    positions=newtiles
+      numneighbors = sum(n in blacktiles for n in find_neighbors(tile))
+      if tile in blacktiles:
+        if numneighbors in (1,2):
+          newtiles.append(tile)
+      elif tile not in blacktiles:
+        if numneighbors == 2:
+            newtiles.append(tile)
+#    if (i+1) % 10 == 0:
+#      print(i+1, len(newtiles))
+    blacktiles=newtiles
     
   return(positions)
 
-r10 = flip_tiles(seedtiles, 100)
-print(len(r10))
+r100 = flip_tiles(seedtiles, 100)
+print(len(r100))
 
-#print(len(flip_tiles(seedtiles)))
-  
