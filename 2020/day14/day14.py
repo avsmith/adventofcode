@@ -22,7 +22,6 @@ def reverse(string):
 maskre = re.compile('mask = ([01X]+)')
 memre = re.compile("mem\[(\d+)\] = (\d+)")
 
-
 results = dict()
 results2 = dict()
 
