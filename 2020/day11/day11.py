@@ -67,10 +67,6 @@ def find_final_seats(seatplan, max_dist=1, max_viewed_seats=4):
   nextseats = change_seats(seatplan, max_dist, max_viewed_seats)
   while not np.array_equal(curseats, nextseats):
     curseats = nextseats.copy()
-#Printing used to help debug
-#    chart = '\n'.join(''.join(str(x) for x in y) for y in curseats)
-#    print(chart.replace('-1','L').replace('1','#').replace('0','.'))
-#    print()
     nextseats = change_seats(curseats, max_dist, max_viewed_seats)
   return(len(np.where(curseats==1)[0]))
 
