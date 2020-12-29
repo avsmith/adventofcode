@@ -9,14 +9,12 @@ input = f.read()
 def recursive_math(l, curval=0, operand= '+'):
   for item in list(l):
     if isinstance(item, pyparsing.ParseResults):
-      returnval = recursive_math(item, curval=0)
+      returnval = recursive_math(item)
       operation = f"{curval} {operand} {returnval}"
       curval = eval(operation)
     else:
-      if item == '+':
-        operand = '+'
-      elif item == '*':
-        operand = '*'
+      if item in ('+','*'):
+        operand = item
       else:
         operation = f"{curval} {operand} {item}"
         curval = eval(operation)
@@ -45,7 +43,6 @@ for line in input.splitlines():
   parsed2 = arith_expr.parseString(line)
   result2 = recursive_math(parsed2)
   part2 += result2
-
 
 print(part1)
 print(part2)
