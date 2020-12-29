@@ -108,7 +108,7 @@ def run_rounds4d(newuniverse, r=6):
       for uy in range(y):
         for uz in range(z):
           for uw in range(w):
-            neighbors = check_neighbors(ux, uy, uz, uw, newuniverse)
+            neighbors = check_neighbors4d(ux, uy, uz, uw, newuniverse)
             if newuniverse[ux][uy][uz][uw] == 1: 
               if neighbors in (2,3):
                 altuniverse[ux][uy][uz][uw] = 1
@@ -125,5 +125,5 @@ def run_rounds4d(newuniverse, r=6):
 part1 = run_rounds(universe)
 print(part1)
 
-#part2 = run_rounds4d(universe)
-#print(part2)
+part2 = run_rounds4d(universe4d)
+print(part2)
