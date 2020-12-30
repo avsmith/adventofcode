@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from collections import defaultdict, OrderedDict
+from collections import defaultdict
 import numpy as np
 from functools import reduce
 #import pprint as pp
@@ -34,7 +34,7 @@ for ingredient in poss_menu_allergens:
   overlap = list(reduce(lambda i, j: i & j, (set(x) for x in poss_menu_allergens[ingredient])))
   reduced_menu_allegens[ingredient] = overlap
   
-# NOTE: This reduces list is not 1:1, but expecting that in part 2
+# NOTE: This reduced list is not 1:1, but expecting that in part 2
 # Seeing part2: YUP!!!!
 
 # List of all menu items (allowing repeats)
