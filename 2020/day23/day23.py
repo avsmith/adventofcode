@@ -5,8 +5,6 @@ from collections import deque
 input = '327465189'
 
 cups1 = [int(x) for x in input]
-cups2 = [int(x) for x in input]
-
 
 class Cup:
   def __init__(self, val):
@@ -101,6 +99,7 @@ def play_cups_part2(starting, rounds=int(1e7), size=int(1e6)):
     head = head.next
 
   a, b = nodes[1].next.val, nodes[1].next.next.val
+  return a, b
 
 
 next, nextnext = play_cups_part2([int(x) for x in input])
