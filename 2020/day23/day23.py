@@ -13,11 +13,6 @@ class Cup:
     self.val = val
     self.next = None
 
-class Node:
-  def __init__(self, val):
-    self.val = val
-    self.next = None
-
 def play_cups(starting, n=100):
   cuptracker = starting
   for i in range(n):
