@@ -2,44 +2,44 @@
 
 import os, sys
 
-f = open(os.path.join(sys.path[0], 'input12.txt'))
+f = open(os.path.join(sys.path[0], "input12.txt"))
 input = f.read()
 
-position = 0+0j
-position2 = 0+0j
+position = 0 + 0j
+position2 = 0 + 0j
 direction = 1
-waypoint = 10+1j
+waypoint = 10 + 1j
 
 for item in input.splitlines():
-  instruction = item[0]
-  amount = int(item[1:])
-  if instruction == 'N':
-    position += amount * 1j
-    waypoint += amount * 1j
-  elif instruction == 'S':
-    position -= amount * 1j
-    waypoint -= amount * 1j  
-  elif instruction == 'E':
-    position += amount
-    waypoint += amount
-  elif instruction == 'W':
-    position -= amount
-    waypoint -= amount
-  elif instruction == 'F':
-    position += direction * amount
-    position2 += waypoint * amount
-  elif instruction == 'R':
-    turns = amount/90
-    turn_factor = 1j**(4-turns%4)
-    direction *= turn_factor
-    waypoint *= turn_factor
-  elif instruction == 'L':
-    turns = amount/90
-    turn_factor = 1j**(turns%4)
-    direction *= turn_factor
-    waypoint *= turn_factor
-  else:
-    raise Error("Ooops")
+    instruction = item[0]
+    amount = int(item[1:])
+    if instruction == "N":
+        position += amount * 1j
+        waypoint += amount * 1j
+    elif instruction == "S":
+        position -= amount * 1j
+        waypoint -= amount * 1j
+    elif instruction == "E":
+        position += amount
+        waypoint += amount
+    elif instruction == "W":
+        position -= amount
+        waypoint -= amount
+    elif instruction == "F":
+        position += direction * amount
+        position2 += waypoint * amount
+    elif instruction == "R":
+        turns = amount / 90
+        turn_factor = 1j ** (4 - turns % 4)
+        direction *= turn_factor
+        waypoint *= turn_factor
+    elif instruction == "L":
+        turns = amount / 90
+        turn_factor = 1j ** (turns % 4)
+        direction *= turn_factor
+        waypoint *= turn_factor
+    else:
+        raise Error("Ooops")
 
-print(int(abs(position.real)+abs(position.imag)))
-print(int(abs(position2.real)+abs(position2.imag)))
+print(int(abs(position.real) + abs(position.imag)))
+print(int(abs(position2.real) + abs(position2.imag)))
