@@ -29,9 +29,6 @@ for string in input.splitlines():
     encoded_string = string.replace('"', '\\"')
     encoded_string2 = encode_string(string)
     length2 += len(encoded_string2) - len(string)
-    #  print(len(string), len(decoded_string),len(encoded_string))
-    print(encoded_string, len(encoded_string), encoded_string2, len(encoded_string2))
-
 
 print(f"Part 1 answer: {length}")
 print(f"Part 2 answer: {length2}")
