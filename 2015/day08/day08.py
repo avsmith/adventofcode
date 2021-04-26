@@ -25,10 +25,8 @@ length2 = 0
 for string in input.splitlines():
     decoded_string = bytes(string[1:-1], "ascii").decode("unicode_escape")
     length += len(string) - len(decoded_string)
-    decode2 = bytes(string, "ascii").decode("unicode_escape")
-    encoded_string = string.replace('"', '\\"')
-    encoded_string2 = encode_string(string)
-    length2 += len(encoded_string2) - len(string)
+    encoded_string = encode_string(string)
+    length2 += len(encoded_string) - len(string)
 
 print(f"Part 1 answer: {length}")
 print(f"Part 2 answer: {length2}")
