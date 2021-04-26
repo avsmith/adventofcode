@@ -4,10 +4,11 @@ import os
 import sys
 import pprint
 from collections import defaultdict
+from copy import deepcopy
 
 
 class Wire:
-    def __init__(self, function, inputa=None, inputb=None, value=-1):
+    def __init__(self, function, inputa=None, inputb=None, value=None):
         self.function = function
         self.value = value
         self.inputa = inputa
@@ -18,7 +19,6 @@ class Wire:
 
 
 def return_value(wire):
-    #    print(f"{wire.function} {wire.inputa} {wire.inputb}")
     if wire.value is not None:
         return wire.value
     else:
@@ -27,8 +27,6 @@ def return_value(wire):
 
 
 def evaluate_formula(form, ina, inb):
-    #    print(form, ina, inb)
-    #    print(form)
     if form == "EQUAL":
         if ina.isdigit():
             return int(ina)
@@ -99,9 +97,14 @@ for line in data.splitlines():
     wires[outcome] = Wire(function, inputa, inputb, value)
 
 
-# pp.pprint(wires)
 print("Part 1:", return_value(wires["a"]))
+answer1 = return_value(wires["a"])
 
-# for x in sorted(wires):
-#    print(x, return_value(wires[x]))
-# pp.pprint(wires)
+# For part 2, set b to answer from part 1
+wires["b"].inputa = str(answer1)
+
+# Short of a copy or reinitialization, reset all the outputs
+for c in wires:
+    wires[c].value = None
+
+print("Part 2:", return_value(wires["a"]))
