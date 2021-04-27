@@ -59,6 +59,9 @@ def next_password(string):
         int((ALPHABET_SIZE ** (len(string) + 1) - 1) / (ALPHABET_SIZE - 1)),
     ):
         possible_password = base_10_to_alphabet(i)
+        # Note: The 'test_good_characters' is terribly inefficient
+        # Should rather skip big ranged when bad character observed.
+        # However, that isn't a problem with given input, so not implemented
         if (
             test_consecutive_chars(possible_password)
             and test_good_characters(possible_password)
@@ -71,4 +74,7 @@ def next_password(string):
 
 input = "cqjxjnds"
 
-print("Part 1:", next_password(input))
+part1 = next_password(input)
+print("Part 1:", part1)
+part2 = next_password(part1)
+print("Part 2:", part2)
