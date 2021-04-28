@@ -53,4 +53,18 @@ def furthest(team, time=2503):
     return dist
 
 
-print(furthest(team))
+def scoring(team, time=2503):
+    scores = [0] * len(team)
+    for t in range(1, time + 1):
+        positions = list()
+        for d in team:
+            pos = distance_traveled(d, t)
+            positions.append(pos)
+        leader = [i for i, x in enumerate(positions) if x == max(positions)]
+        for i in leader:
+            scores[i] += 1
+    return max(scores)
+
+
+print("Part 1:", furthest(team))
+print("Part 2:", scoring(team))
