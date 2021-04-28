@@ -29,32 +29,37 @@ cleanedinput = (
     .replace(".", "")
 )
 
-seating = defaultdict(lambda: defaultdict(int))
+happyscores = defaultdict(lambda: defaultdict(int))
 
 for line in cleanedinput.splitlines():
     (persona, happiness, personb) = line.split(" ")
-    seating[persona][personb] = int(happiness)
+    happyscores[persona][personb] = int(happiness)
 
-people = set([c for c in seating] + [d for c in seating for d in seating[c]])
+people = set(
+    [c for c in happyscores] + [d for c in happyscores for d in happyscores[c]]
+)
 
-happiest = None
+
 happiest_guest = None
 
-for arrangement in permutations(people):
-    guests = len(arrangement)
-    scores = list()
-    for num in range(guests):
-        seatscore = (
-            seating[arrangement[num]][arrangement[(num + 1) % guests]]
-            + seating[arrangement[(num + 1) % guests]][arrangement[num]]
-        )
-        scores.append(seatscore)
-    happy = sum(scores)
-    happy_guest = sum(sorted(scores)[1 : len(scores)])
-    if happiest is None or happy > happiest:
-        happiest = happy
-    if happiest_guest is None or happy_guest > happiest_guest:
-        happiest_guest = happy_guest
 
-print(f"Part 1: {happiest}")
-print(f"Part 2: {happiest_guest}")
+def seating_score(hs, skip=0):
+    people = set([c for c in hs] + [d for c in hs for d in hs[c]])
+    happiest = None
+    for seating in permutations(people):
+        num = len(seating)
+        scores = list()
+        for i in range(num):
+            seatscore = (
+                happyscores[seating[i]][seating[(i + 1) % num]]
+                + happyscores[seating[(i + 1) % num]][seating[i]]
+            )
+            scores.append(seatscore)
+        happy = sum(sorted(scores)[skip : len(scores)])
+        if happiest is None or happy > happiest:
+            happiest = happy
+    return happiest
+
+
+print(f"Part 1:", seating_score(happyscores))
+print(f"Part 2:", seating_score(happyscores, 1))
