@@ -38,16 +38,23 @@ for line in cleanedinput.splitlines():
 people = set([c for c in seating] + [d for c in seating for d in seating[c]])
 
 happiest = None
+happiest_guest = None
 
 for arrangement in permutations(people):
-    happy = 0
     guests = len(arrangement)
+    scores = list()
     for num in range(guests):
-        happy += (
+        seatscore = (
             seating[arrangement[num]][arrangement[(num + 1) % guests]]
             + seating[arrangement[(num + 1) % guests]][arrangement[num]]
         )
+        scores.append(seatscore)
+    happy = sum(scores)
+    happy_guest = sum(sorted(scores)[1 : len(scores)])
     if happiest is None or happy > happiest:
         happiest = happy
+    if happiest_guest is None or happy_guest > happiest_guest:
+        happiest_guest = happy_guest
 
 print(f"Part 1: {happiest}")
+print(f"Part 2: {happiest_guest}")
