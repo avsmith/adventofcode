@@ -52,14 +52,18 @@ for line in data.splitlines():
 properties = ["capacity", "durability", "flavor", "texture"]
 
 
-def find_best(ingredients, target=100):
+def find_recipe(ingredients, diet=None, target=100):
     best = None
     amounts = amt_totals(target, len(ingredients))
     for recipe in sorted(amounts):
         totals = defaultdict(int)
+        calories = 0
         for i in range(len(recipe)):
+            calories += ingredients[i]["calories"] * recipe[i]
             for prop in properties:
                 totals[prop] += ingredients[i][prop] * recipe[i]
+        if diet is not None and diet != calories:
+            continue
         values = [value for value in totals.values()]
         if all(v > 0 for v in values):
             product = np.product(values)
@@ -68,4 +72,5 @@ def find_best(ingredients, target=100):
     return best
 
 
-print("Part 1:", find_best(ingredients))
+print("Part 1:", find_recipe(ingredients))
+print("Part 2:", find_recipe(ingredients, diet=500))
