@@ -67,4 +67,27 @@ def find_aunt(ss):
             return sue
 
 
+def check_match_updated(reference, aunt):
+    for k in reference:
+        if aunt[k] is None:
+            continue
+        if k in ["cats", "trees"]:
+            if ref[k] >= aunt[k]:
+                return False
+        elif k in ["pomeranians", "goldfish"]:
+            if ref[k] <= aunt[k]:
+                return False
+        else:
+            if ref[k] != aunt[k]:
+                return False
+    return True
+
+
+def find_aunt_updated(ss):
+    for sue in ss:
+        if check_match_updated(ref, sues[sue]):
+            return sue
+
+
 print("Part 1:", find_aunt(sues))
+print("Part 2:", find_aunt_updated(sues))
