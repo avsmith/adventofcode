@@ -13,21 +13,21 @@ number_re = re.compile("\((\d+)x(\d+)\)")
 
 
 def expand_text(text):
-    new = ""
+    nchars = 0
     while len(text) > 0:
         m = number_re.search(text)
         if m is None:
-            return new + text
+            #            return new + text
+            return nchars + len(text)
         else:
             start = m.start()
             chars = m.group(1)
             repeats = m.group(2)
             length = 3 + len(repeats) + len(chars)
             testchars = text[start + int(length) : start + int(length) + int(chars)]
-
-            new += text[:start] + testchars * int(repeats)
+            nchars += len(text[:start] + testchars * int(repeats))
             text = text[start + int(length) + int(chars) :]
-    return new
+    return nchars
 
 
-print("Part 1:", len(expand_text(input)))
+print("Part 1:", expand_text(input))
