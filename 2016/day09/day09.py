@@ -3,31 +3,37 @@
 
 import os
 import sys
-import re
-
 
 f = open(os.path.join(sys.path[0], "input09.txt"))
 input = f.read()
+input = input.rstrip()
 
-number_re = re.compile("\((\d+)x(\d+)\)")
 
-
-def expand_text(text):
+def count_expanded(text, part2=False):
     nchars = 0
-    while len(text) > 0:
-        m = number_re.search(text)
-        if m is None:
-            #            return new + text
-            return nchars + len(text)
+    start = text.find("(")
+    if start >= 0:
+        xpos = text.find("x")
+        end = text.find(")")
+        chars = int(text[start + 1 : xpos])
+        repeats = int(text[xpos + 1 : end])
+        remain = text[end + chars + 1 :]
+        target = text[end + 1 : end + chars + 1]
+        if part2 and target.find(")"):
+            nchars += (
+                start
+                + count_expanded(target, part2) * repeats
+                + count_expanded(remain, part2)
+            )
+            return nchars
         else:
-            start = m.start()
-            chars = m.group(1)
-            repeats = m.group(2)
-            length = 3 + len(repeats) + len(chars)
-            testchars = text[start + int(length) : start + int(length) + int(chars)]
-            nchars += len(text[:start] + testchars * int(repeats))
-            text = text[start + int(length) + int(chars) :]
+            nchars += start + chars * repeats + count_expanded(remain, part2)
+            return nchars
+    else:
+        nchars += len(text)
+        return nchars
     return nchars
 
 
-print("Part 1:", expand_text(input))
+print("Part 1:", count_expanded(input))
+print("Part 2:", count_expanded(input, True))
