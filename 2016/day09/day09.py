@@ -19,7 +19,7 @@ def count_expanded(text, part2=False):
         repeats = int(text[xpos + 1 : end])
         remain = text[end + chars + 1 :]
         target = text[end + 1 : end + chars + 1]
-        if part2 and target.find(")"):
+        if part2:
             chars = count_expanded(target, part2)
         nchars += start + chars * repeats + count_expanded(remain, part2)
         return nchars
