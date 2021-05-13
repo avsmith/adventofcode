@@ -20,15 +20,9 @@ def count_expanded(text, part2=False):
         remain = text[end + chars + 1 :]
         target = text[end + 1 : end + chars + 1]
         if part2 and target.find(")"):
-            nchars += (
-                start
-                + count_expanded(target, part2) * repeats
-                + count_expanded(remain, part2)
-            )
-            return nchars
-        else:
-            nchars += start + chars * repeats + count_expanded(remain, part2)
-            return nchars
+            chars = count_expanded(target, part2)
+        nchars += start + chars * repeats + count_expanded(remain, part2)
+        return nchars
     else:
         nchars += len(text)
         return nchars
