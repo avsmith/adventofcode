@@ -5,12 +5,10 @@ import os
 import sys
 
 f = open(os.path.join(sys.path[0], "input09.txt"))
-input = f.read()
-input = input.rstrip()
+input = f.read().rstrip()
 
 
 def count_expanded(text, part2=False):
-    nchars = 0
     start = text.find("(")
     if start >= 0:
         xpos = text.find("x")
@@ -21,11 +19,9 @@ def count_expanded(text, part2=False):
         target = text[end + 1 : end + chars + 1]
         if part2:
             chars = count_expanded(target, part2)
-        nchars += start + chars * repeats + count_expanded(remain, part2)
-        return nchars
+        nchars = start + chars * repeats + count_expanded(remain, part2)
     else:
-        nchars += len(text)
-        return nchars
+        nchars = len(text)
     return nchars
 
 
