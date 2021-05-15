@@ -56,7 +56,7 @@ def check_match(reference, aunt):
     for k in reference:
         if aunt[k] is None:
             continue
-        if ref[k] != aunt[k]:
+        if reference[k] != aunt[k]:
             return False
     return True
 
@@ -72,13 +72,13 @@ def check_match_updated(reference, aunt):
         if aunt[k] is None:
             continue
         if k in ["cats", "trees"]:
-            if ref[k] >= aunt[k]:
+            if reference[k] >= aunt[k]:
                 return False
         elif k in ["pomeranians", "goldfish"]:
-            if ref[k] <= aunt[k]:
+            if reference[k] <= aunt[k]:
                 return False
         else:
-            if ref[k] != aunt[k]:
+            if reference[k] != aunt[k]:
                 return False
     return True
 
