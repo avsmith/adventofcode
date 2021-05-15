@@ -12,7 +12,7 @@ moves = input.split(", ")
 def bunny_path(moves, part2=False):
     direction = 1
     position = 0 + 0j
-    visited = defaultdict()
+    visited = defaultdict(int)
 
     for instruction in moves:
         if instruction[0] == "R":
@@ -20,8 +20,14 @@ def bunny_path(moves, part2=False):
         elif instruction[0] == "L":
             direction *= -1j
         distance = int(instruction[1:])
-        position += distance * direction
+        for d in range(distance):
+            position += direction
+            if part2 and visited[position] > 0:
+                return int(abs(position.real) + abs(position.imag))
+            visited[position] += 1
+
     return int(abs(position.real) + abs(position.imag))
 
 
 print("Part 1:", bunny_path(moves))
+print("Part 2:", bunny_path(moves, True))
