@@ -17,45 +17,61 @@ value 2 goes to bot 2
 """
 lines = input.splitlines()
 
-rules = [None] * 210
-values = [None] * 210
 
-for line in lines:
-    items = line.split()
-    if len(items) == 12:
-        rules[int(items[1])] = (int(items[6]), int(items[11]))
-    elif len(items) == 6:
-        if isinstance(values[int(items[5])], list):
-            values[int(items[5])].append(int(items[1]))
-            values[int(items[5])].sort()
-        else:
-            values[int(items[5])] = [int(items[1])]
+def initiate_values(lines):
+    rules = [None] * 210
+    values = [None] * 210
+    for line in lines:
+        items = line.split()
+        if len(items) == 12:
+            rules[int(items[1])] = (items[5], int(items[6]), items[10], int(items[11]))
+        elif len(items) == 6:
+            if isinstance(values[int(items[5])], list):
+                values[int(items[5])].append(int(items[1]))
+                values[int(items[5])].sort()
+            else:
+                values[int(items[5])] = [int(items[1])]
+    return values, rules
 
 
-def bots(val, rules):
+output = [None] * 21
+
+
+def bots(val, rules, output, part2=False):
     changes = [(i, x) for i, x in enumerate(values) if x is not None and len(x) > 1]
     while len(changes) > 0:
         for change in changes:
             donor = change[0]
             lowvalue = change[1][0]
             highvalue = change[1][1]
-            if lowvalue == 17 and highvalue == 61:
+            if lowvalue == 17 and highvalue == 61 and not part2:
                 return donor
-            lowrecipient = rules[donor][0]
-            highrecipient = rules[donor][1]
-            if isinstance(values[lowrecipient], list):
-                values[lowrecipient].append(lowvalue)
-                values[lowrecipient].sort()
+            lowdest = rules[donor][0]
+            lowrecipient = rules[donor][1]
+            highdest = rules[donor][2]
+            highrecipient = rules[donor][3]
+            if lowdest == "bot":
+                if isinstance(values[lowrecipient], list):
+                    values[lowrecipient].append(lowvalue)
+                    values[lowrecipient].sort()
+                else:
+                    values[lowrecipient] = [lowvalue]
             else:
-                values[lowrecipient] = [lowvalue]
-            if isinstance(values[highrecipient], list):
-                values[highrecipient].append(highvalue)
-                values[highrecipient].sort()
+                output[lowrecipient] = lowvalue
+            if highdest == "bot":
+                if isinstance(values[highrecipient], list):
+                    values[highrecipient].append(highvalue)
+                    values[highrecipient].sort()
+                else:
+                    values[highrecipient] = [highvalue]
             else:
-                values[highrecipient] = [highvalue]
-            values[donor] = []
+                output[highrecipient] = highvalue
+            values[donor] = None
+        if (len([x for x in output[0:3] if x is not None])) == 3:
+            return output[0] * output[1] * output[2]
         changes = [(i, x) for i, x in enumerate(values) if x is not None and len(x) > 1]
-    return None
 
 
-print("Part 1:", bots(values, rules))
+values, rules = initiate_values(lines)
+print("Part 1:", bots(values, rules, output, False))
+print("Part 2:", bots(values, rules, output, True))
