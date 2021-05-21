@@ -2,46 +2,34 @@
 
 input = 3014603
 
+from collections import deque
+
 
 def seed_elves(num):
-    start = dict()
+    start = deque()
     for i in range(num):
-        start[i + 1] = 1
+        start.append(i + 1)
     return start
+
+
+def delete_nth(d, n):
+    d.rotate(-n)
+    d.popleft()
+    d.rotate(n)
 
 
 def find_elf(num, part2=False):
     elves = seed_elves(num)
-    presents = [k for k in elves if elves[k] > 0]
-    while len(presents) > 1:
-        for i in range(len(presents)):
-            if elves[presents[i]] > 0:
-                if not part2:
-                    if i == len(presents) - 1:
-                        target = presents[0]
-                    else:
-                        target = presents[i + 1]
-                    elves[presents[i]] += elves[target]
-                    elves[target] = 0
-                else:
-                    remaining = [k for k in elves if elves[k] > 0]
-                    if len(remaining) % 1000 == 0 or len(remaining) < 10 == 0:
-                        print(len(remaining))
-                    if len(remaining) > 1:
-                        target = find_across(remaining, presents[i])
-                        elves[presents[i]] += elves[target]
-                        elves[target] = 0
-
-        presents = [k for k in elves if elves[k] > 0]
-    return presents[0]
+    while len(elves) > 1:
+        if part2:
+            target = num // 2
+        else:
+            target = 1
+        delete_nth(elves, target)
+        elves.rotate(-1)
+        num -= 1
+    return elves[0]
 
 
-def find_across(list, elf):
-    across = list.index(elf) + len(list) // 2
-    if across >= len(list):
-        across = across - len(list)
-    return list[across]
-
-
-# print("Part 1:", find_elf(input))
-print("Part 2:", find_elf(input, True))
+print("Part 1:", find_elf(5))
+print("Part 2:", find_elf(5, True))
