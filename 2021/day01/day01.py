@@ -8,10 +8,14 @@ input = f.read()
 
 data = [int(x) for x in input.splitlines()]
 
-count1 = 0
 
-for i in range(1, len(data)):
-    if data[i] < data[i+1]:
-        count1 += 1
+def deeper(depths, window=1):
+    decreasing = 0
+    for i in range(window, len(depths)):
+        if sum(depths[i-window:i]) < sum(depths[i-window+1:i+1]):
+            decreasing += 1
+    return(decreasing)
 
-print("Part 1", count1)
+
+print("Part 1:", deeper(data))
+print("Part 2:", deeper(data, 3))
