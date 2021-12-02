@@ -13,12 +13,13 @@ def move_sub(data, part2=False):
     depth = 0
     lateral = 0
     for move, dist in data:
+        dist = int(dist)
         if move == 'up':
-            depth -= int(dist)
+            depth -= dist
         elif move == 'down':
-            depth += int(dist)
+            depth += dist
         elif move == 'forward':
-            lateral += int(dist)
+            lateral += dist
     return(depth*lateral)
 
 
