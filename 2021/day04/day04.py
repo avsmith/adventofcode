@@ -45,6 +45,22 @@ def find_winner(boards, moves):
             if bingo:
                 return(board, called)
 
+def find_last(boards, moves):
+    last = False
+    for i in range(len(moves)):
+        losers = []
+        called = moves[0:i+1]
+        for board in boards:
+            bingo = check_bingo(board, called)
+            if not bingo:
+                losers.append(board)
+            if last and bingo:
+                return(board, called)
+        if len(losers) == 1:
+            last = True
+        boards = losers
 
 b, m = find_winner(boards, moves)
 print("Part 1:", int(sum(b[np.where(~np.isin(b,m))])*m[-1]))
+b2, m2 = find_last(boards, moves)
+print("Part 2:", int(sum(b2[np.where(~np.isin(b2,m2))])*m2[-1]))
