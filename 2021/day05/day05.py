@@ -9,7 +9,7 @@ import sys
 f = open(os.path.join(sys.path[0], "input05.txt"))
 input = f.read()
 
-movesre = re.compile("(\d+),(\d+) -> (\d+),(\d+)")
+movesre = re.compile("(\\d+),(\\d+) -> (\\d+),(\\d+)")
 
 moves = np.array([], dtype='i8')
 
@@ -29,41 +29,27 @@ def find_overlap(moves, diag=False):
     board = np.zeros((maxval+1, maxval+1))
 
     for x1, y1, x2, y2 in moves:
-        if x1 == x2:
-            if y2 < y1:
-                ylo = y2
-                yhi = y1
-            else:
-                ylo = y1
-                yhi = y2
-            for y in range(ylo, yhi+1):
-                board[y, x1] += 1
-        elif y1 == y2:
-            if x2 < x1:
-                xlo = x2
-                xhi = x1
-            else:
-                xlo = x1
-                xhi = x2
-            for x in range(xlo, xhi+1):
-                board[y1, x] += 1
+        if x2 > x1:
+            xstep = 1
+        elif x2 < x1:
+            xstep = -1
         else:
-            if diag:
-                if x2 > x1:
-                    xstep = 1
-                else:
-                    xstep = -1
-                if y2 > y1:
-                    ystep = 1
-                else:
-                    ystep = -1
-                steps = abs(x2-x1) + 1
-                for delta in range(steps):
-                    x = x1 + xstep*delta
-                    y = y1 + ystep*delta
-                    board[y, x] += 1
+            xstep = 0
+        if y2 > y1:
+            ystep = 1
+        elif y2 < y1:
+            ystep = -1
+        else:
+            ystep = 0
+        steps = max(abs(x2-x1), abs(y2-y1)) + 1
+        if not diag and xstep != 0 and ystep != 0:
+            continue
+        for delta in range(steps):
+            x = x1 + xstep*delta
+            y = y1 + ystep*delta
+            board[y, x] += 1
 
-
+#    print(board)
     positions = np.where(board > 1)
     return(len(positions[0]))
 
