@@ -29,7 +29,6 @@ for x in range(max(data).bit_length(), 0, -1):
 
 print("Part 1:", gamma*epsilon)
 
-
 def oxygen(list, bit):
     if bit_set(list, bit):
         new = [x for x in list if x & (1 << bit)]
