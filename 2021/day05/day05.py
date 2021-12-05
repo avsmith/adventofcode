@@ -48,8 +48,6 @@ def find_overlap(moves, diag=False):
             x = x1 + xstep*delta
             y = y1 + ystep*delta
             board[y, x] += 1
-
-#    print(board)
     positions = np.where(board > 1)
     return(len(positions[0]))
 
