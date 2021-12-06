@@ -33,3 +33,4 @@ def lanternfish_count(start, days=80):
 
 
 print("Part 1:", lanternfish_count(starting))
+print("Part 1:", lanternfish_count(starting, 256))
