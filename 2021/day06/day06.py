@@ -15,16 +15,11 @@ def lanternfish_count(start, days=80):
         fish[c] += 1
 
     for i in range(days):
-        newfish = defaultdict(int)
-        for j in range(9):
-            if (j >= 1 and j <= 6) or j == 8:
-                newfish[j-1] = fish[j]
-            elif j == 0:
-                newfish[6] += fish[0]
-                newfish[8] = fish[0]
-            elif j == 7:
-                newfish[6] += fish[7]
-        fish = newfish
+        newfish = fish[0]
+        for j in range(1, 9):
+            fish[j-1] = fish[j]
+        fish[6] += newfish
+        fish[8] = newfish
 
     totalfish = 0
     for i in range(9):
