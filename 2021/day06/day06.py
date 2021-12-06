@@ -8,27 +8,28 @@ initial = "5,4,3,5,1,1,2,1,2,1,3,2,3,4,5,1,2,4,3,2,5,1,4,2,1,1,2,5,4,4,4,1,5,4,5
 starting = [int(x) for x in initial.split(",")]
 
 
-values = defaultdict(int)
+def lanternfish_count(start, days=80):
+    fish = defaultdict(int)
 
-for c in starting:
-    values[c] += 1
+    for c in starting:
+        fish[c] += 1
+
+    for i in range(days):
+        newfish = defaultdict(int)
+        for j in range(9):
+            if (j >= 1 and j <= 6) or j == 8:
+                newfish[j-1] = fish[j]
+            elif j == 0:
+                newfish[6] += fish[0]
+                newfish[8] = fish[0]
+            elif j == 7:
+                newfish[6] += fish[7]
+        fish = newfish
+
+    totalfish = 0
+    for i in range(9):
+        totalfish += fish[i]
+    return(totalfish)
 
 
-for i in range(80):
-    newvalues = defaultdict(int)
-    for j in range(9):
-        if (j >= 1 and j <= 6) or j == 8:
-            newvalues[j-1] = values[j]
-        elif j == 0:
-            newvalues[6] += values[0]
-            newvalues[8] = values[0]
-        elif j == 7:
-            newvalues[6] += values[7]
-    values = newvalues
-
-total = 0
-
-for i in range(9):
-    total += values[i]
-
-print("Part 1:", total)
+print("Part 1:", lanternfish_count(starting))
