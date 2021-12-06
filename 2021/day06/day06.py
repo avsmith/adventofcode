@@ -14,7 +14,7 @@ def lanternfish_count(start, days=80):
     for c in starting:
         fish[c] += 1
 
-    for i in range(days):
+    for _ in range(days):
         newfish = fish[0]
         for j in range(1, 9):
             fish[j-1] = fish[j]
@@ -28,4 +28,4 @@ def lanternfish_count(start, days=80):
 
 
 print("Part 1:", lanternfish_count(starting))
-print("Part 1:", lanternfish_count(starting, 256))
+print("Part 2:", lanternfish_count(starting, 256))
