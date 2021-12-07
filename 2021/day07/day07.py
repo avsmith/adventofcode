@@ -9,13 +9,23 @@ starting = [int(x) for x in initial.split(",")]
 
 best_value = 0
 min_posiition = 0
+best_value2 = 0
+min_posiition2 = 0
 
-for i in range(min(starting),max(starting)+1):
+
+for i in range(min(starting), max(starting)+1):
     total = 0
+    total2 = 0
     for j in starting:
-        total += abs(i-j)
-    if total < best_value or best_value==0:
+        dist = abs(i-j)
+        total += dist
+        total2 += int(dist*(dist+1)/2)
+    if total < best_value or best_value == 0:
         min_position=i
         best_value = total
+    if total2 < best_value2 or best_value2 == 0:
+        min_position2=i
+        best_value2 = total2
 
 print("Part 1:", best_value)
+print("Part 2:", best_value2)
