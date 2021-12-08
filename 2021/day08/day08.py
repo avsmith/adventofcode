@@ -3,9 +3,6 @@
 import os
 import sys
 
-# from collections import defaultdict
-
-
 f = open(os.path.join(sys.path[0], "input08.txt"))
 input = f.read()
 
