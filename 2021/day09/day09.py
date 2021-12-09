@@ -52,4 +52,37 @@ def low_score(grid):
     return score
 
 
+def find_basin(grid, i, j):
+    basin_values = [[i, j, grid[i][j]]]
+    value = grid[i][j]
+    neighbors = neighbor_values(grid, i, j)
+    increasing = [x for x in neighbors if value < x[2] and x[2] != 9]
+    if len(increasing) > 0:
+        for details in increasing:
+            basin_values.append(details)
+        for new in increasing:
+            increasing_neighbors = find_basin(grid, new[0], new[1])
+            if len(increasing_neighbors) > 0:
+                basin_values += increasing_neighbors
+    # Make unique, due to multiple potential paths to increasing points
+    basin_values = [list(x) for x in set(tuple(x) for x in basin_values)]
+    return basin_values
+
+
+def basin_sizes(grid):
+    basins = []
+    points = low_points(grid)
+    for p in points:
+        basins.append(len(find_basin(grid, p[0], p[1])))
+    return basins
+
+
+def basin_score(grid):
+    size_values = basin_sizes(grid)
+    size_values = sorted(size_values, reverse=True)
+    score = size_values[0] * size_values[1] * size_values[2]
+    return score
+
+
 print("Part 1:", low_score(grid))
+print("Part 2:", basin_score(grid))
