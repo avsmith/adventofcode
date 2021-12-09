@@ -44,7 +44,7 @@ def wire_totals(wires):
 # and then sum over each pattern, tne numbers are unique
 reference_totals = wire_totals(reference_segments.keys())
 
-# Then make a reference with total is key with the output number
+# Then make a reference with total as key with the output number
 reference_counts = dict()
 for value, word in enumerate(reference_segments):
     reference_counts[reference_totals[word]] = value
