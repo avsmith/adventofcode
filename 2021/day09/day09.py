@@ -3,8 +3,6 @@
 import os
 import sys
 
-from collections import defaultdict
-
 f = open(os.path.join(sys.path[0], "input09.txt"))
 input = f.read()
 
@@ -14,8 +12,8 @@ for line in input.splitlines():
     grid.append([int(x) for x in line])
 
 
-def low_neighbors(grid):
-    lowpoint = 0
+def low_points(grid):
+    low = []
     for i in range(len(grid)):
         for j, value in enumerate(grid[i]):
             neighbors = []
@@ -37,8 +35,16 @@ def low_neighbors(grid):
                 ]
             test = [value < x for x in neighbors]
             if all(test):
-                lowpoint += 1 + value
-    return lowpoint
+                low.append([i, j])
+    return low
 
 
-print("Part 1:", low_neighbors(grid))
+def low_score(grid):
+    points = low_points(grid)
+    score = 0
+    for p in points:
+        score += grid[p[0]][p[1]] + 1
+    return score
+
+
+print("Part 1:", low_score(grid))
