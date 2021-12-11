@@ -42,9 +42,8 @@ for _ in range(344):
     grid = grid + 1
     flashed = flash(grid)
     if round <= 100:
-
         total += flashed
-    if flashed == 100 :
+    if flashed == 100:
         break
 
 print("Part 1:", total)
