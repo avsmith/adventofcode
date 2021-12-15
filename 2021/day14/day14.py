@@ -5,7 +5,7 @@ import sys
 
 from collections import defaultdict
 
-f = open(os.path.join(sys.path[0], "test14.txt"))
+f = open(os.path.join(sys.path[0], "input14.txt"))
 input = f.read()
 
 # Separate template and the insertion rules
