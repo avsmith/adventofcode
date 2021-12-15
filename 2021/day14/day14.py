@@ -3,39 +3,38 @@
 import os
 import sys
 
+from collections import defaultdict
 
-f = open(os.path.join(sys.path[0], "input14.txt"))
+f = open(os.path.join(sys.path[0], "test14.txt"))
 input = f.read()
 
-move, translation = input.split("\n\n")
+template, insertions = input.split("\n\n")
 
+rules = {}
 
-translate = {}
+for t in insertions.splitlines():
+    source, insert = t.split(" -> ")
+    rules[source] = insert
 
-for t in translation.splitlines():
-    ref, out = t.split(" -> ")
-    translate[ref] = out
+tracker = defaultdict(int)
 
-overall = []
+for i in range(len(template) - 1):
+    tracker[template[i : i + 2]] += 1
+
 
 for _ in range(10):
-    insertion = []
-    for i in range(len(move) - 1):
-        insertion += translate[move[i : i + 2]]
+    newtrack = defaultdict(int)
+    for k in tracker:
+        newtrack[k[0] + rules[k]] += tracker[k]
+        newtrack[rules[k] + k[1]] += tracker[k]
+    tracker = newtrack
 
-    newmove = ""
-    for i in range(len(insertion)):
-        newmove = newmove + move[i] + insertion[i]
+cc = defaultdict(int)
+for k in tracker:
+    for c in k:
+        cc[c] += tracker[k]
+cc[template[0]] += 1
+cc[template[-1]] += 1
 
-    newmove += move[-1]
-    move = newmove
-
-    counts = []
-    for c in set(move):
-        counts.append(move.count(c))
-
-    counts = sorted(counts)
-
-
-print("Part 1:", counts[-1] - counts[0])
-
+counts = sorted([cc[k] for k in cc])
+print("Part1:", (counts[-1] - counts[0]) // 2)
