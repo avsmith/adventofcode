@@ -17,6 +17,9 @@ decode = {
 shape_score = {"rock": 1, "paper": 2, "scissors": 3}
 result = {"win": 6, "tie": 3, "loss": 0}
 
+winners = {"rock": "paper", "paper": "scissors", "scissors": "rock"}
+losers = {"paper": "rock", "scissors": "paper", "rock": "scissors"}
+
 
 def rps(A, B):
     if A == B:
@@ -30,9 +33,18 @@ def rps(A, B):
     return 0
 
 
-def score_rps(inA, inB):
+def score_rps(inA, inB, part1=True):
     convA = decode[inA]
-    convB = decode[inB]
+    if part1:
+        convB = decode[inB]
+    else:
+        if inB == "X":
+            convB = losers[convA]
+        elif inB == "Y":
+            convB = convA
+        elif inB == "Z":
+            convB = winners[convA]
+
     game_score = 0
     #    print(convA, convB, shape_score[convB], rps(convA, convB))
     game_score += rps(convA, convB)
@@ -49,4 +61,12 @@ for line in input.splitlines():
     A, B = line.split(" ")
     score += score_rps(A, B)
 
-print(score)
+print("Part1:", score)
+
+score = 0
+
+for line in input.splitlines():
+    A, B = line.split(" ")
+    score += score_rps(A, B, False)
+
+print("Part2:", score)
