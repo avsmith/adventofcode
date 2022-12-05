@@ -15,17 +15,30 @@ def numbers(c):
         return n + 32 + 26
 
 
-test = """vJrwpWtwJgWrhcsFMMfFFhFp
-jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL
-PmmdzqPrVvPwwTWBwg
-wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
-ttgJtRGJQctTZtZT
-CrZsJsPPZsGzwwsLwLmpwMDw
-"""
+def overlapping(x):
+    overlaps = set(x[0])
+    for i in range(1, len(x)):
+        overlaps = overlaps.intersection(set(x[i]))
+    return "".join(overlaps.difference(set("\n")))
+
 
 score = 0
 for line in input.splitlines():
     overlap = set(line[: len(line) // 2]).intersection(line[len(line) // 2 :])
     score += numbers("".join(overlap))
 
-print(score)
+print("Part1:", score)
+
+from itertools import islice
+
+score2 = 0
+with open("input03.txt") as f:
+    while True:
+        next_n_lines = list(islice(f, 3))
+        #        print(next_n_lines, "\n")
+        if len(next_n_lines) > 2:
+            score2 += numbers(overlapping(next_n_lines))
+        if not next_n_lines:
+            break
+
+print("Part2:", score2)
