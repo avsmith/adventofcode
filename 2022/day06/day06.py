@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-input = "zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw"
-
 import os
 import sys
 
