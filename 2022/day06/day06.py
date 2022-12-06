@@ -13,8 +13,8 @@ def uniq_chars(word):
 
 
 def marker(word, length=4):
-    for i in range(len(input) - length + 1):
-        test = input[i : i + length]
+    for i in range(len(word) - length + 1):
+        test = word[i : i + length]
         if uniq_chars(test):
             return i + length
     return -1
