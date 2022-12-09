@@ -8,23 +8,19 @@ input = f.read()
 
 
 class Dir:
-    def __init__(self, name, parent=None, part2=False):
-        self.name = name
+    def __init__(self, name, path=None, part2=False):
+        if path is None:
+            self.path = "/"
+        elif path == "/":
+            self.path = path + name
+        else:
+            self.path = path + "/" + name
         self.part2 = part2
         self.subdirs = list()
         self.files = list()
-        self.parent = parent
 
-    #        self.path = ""
-    #        if parent == None:
-    #            self.path = name
-    #        else:
-    #            par = next((x for x in dirs if x.name == parent), None)
-    #            print("Par", par.name)
-    #            self.path += par.path + name + "/"
-
-    def addfile(self, size, name):
-        self.files.append(File(size, name))
+    def addfile(self, size, path):
+        self.files.append(File(size, path))
 
     def addchild(self, child):
         self.subdirs.append(child)
@@ -63,34 +59,39 @@ $ ls
 
 
 def describe(dir):
-    print(" ", "Name", dir.name, "Parent", dir.parent, "Subs", dir.subdirs)
+    print(" Path", dir.path)
     for f in dir.files:
         print(" F", f.name, f.size)
     for c in dir.subdirs:
-        print(" D", c)
+        print(" D", c.path)
 
 
 dirs = list()
 
-for line in test.splitlines():
-    #    print("\nLine", line)
+for line in input.splitlines():
     items = line.split()
     if len(items) == 3:
-        #        print("Line", line)
         if (items[2]) == "/":
             curdir = Dir(items[2])
             dirs.append(curdir)
+            path = "/"
         else:
             if items[2] == "..":
-                parent = curdir.parent
-                if parent is not None:
-                    curdir = next((x for x in dirs if x.name == parent), None)
+                splitpath = path.split("/")
+                path = "/".join(splitpath[:-1])
+                if path == "":
+                    path = "/"
+                curdir = next((x for x in dirs if x.path == path), None)
             else:
-                curdir = next((x for x in dirs if x.name == items[2]), None)
+                if path == "/":
+                    path = path + items[2]
+                else:
+                    path = path + "/" + items[2]
+                curdir = next((x for x in dirs if x.path == path), None)
     elif items[0] == "dir":
-        dirs.append(Dir(items[1], curdir.name))
-        curdir.addchild(items[1])
-
+        newdir = Dir(items[1], curdir.path)
+        dirs.append(newdir)
+        curdir.addchild(newdir)
     elif items[0].isnumeric():
         curdir.addfile(int(items[0]), items[1])
 #    describe(curdir)
@@ -101,14 +102,20 @@ def calcsize(dir):
     for f in dir.files:
         size += f.size
     for s in dir.subdirs:
-        d = next((x for x in dirs if x.name == s), None)
+        d = next((x for x in dirs if x.path == s.path), None)
         size += calcsize(d)
-    #    print(dir.name, dir.subdirs, size)
     return size
 
 
 totalsize = 0
+
+# btgrv
+# d = next((x for x in dirs if x.name == "ddhfvv"), None)
+# print(d.name, d.subdirs)
+
 for d in dirs:
+    #    for s in d.subdirs:
+    #        print(s)
     #    describe(d)
     dirsize = calcsize(d)
     if dirsize <= 100000:
