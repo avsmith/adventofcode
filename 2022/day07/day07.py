@@ -18,12 +18,16 @@ class Dir:
         self.part2 = part2
         self.subdirs = list()
         self.files = list()
+        self.size = 0
 
     def addfile(self, size, path):
         self.files.append(File(size, path))
 
     def addchild(self, child):
         self.subdirs.append(child)
+
+    def updatesize(self, size):
+        self.size = size
 
 
 class File:
@@ -32,32 +36,7 @@ class File:
         self.name = name
 
 
-test = """$ cd /
-$ ls
-dir a
-14848514 b.txt
-8504156 c.dat
-dir d
-$ cd a
-$ ls
-dir e
-29116 f
-2557 g
-62596 h.lst
-$ cd e
-$ ls
-584 i
-$ cd ..
-$ cd ..
-$ cd d
-$ ls
-4060174 j
-8033020 d.log
-5626152 d.ext
-7214296 k
-"""
-
-
+# Used for debugging
 def describe(dir):
     print(" Path", dir.path)
     for f in dir.files:
@@ -94,7 +73,6 @@ for line in input.splitlines():
         curdir.addchild(newdir)
     elif items[0].isnumeric():
         curdir.addfile(int(items[0]), items[1])
-#    describe(curdir)
 
 
 def calcsize(dir):
@@ -108,19 +86,20 @@ def calcsize(dir):
 
 
 totalsize = 0
+deletesize = 0
 
-# btgrv
-# d = next((x for x in dirs if x.name == "ddhfvv"), None)
-# print(d.name, d.subdirs)
+filesystem = 70000000
+updatesize = 30000000
+allfilesize = calcsize(next((x for x in dirs if x.path == "/"), None))
+neededspace = updatesize - (filesystem - allfilesize)
 
 for d in dirs:
-    #    for s in d.subdirs:
-    #        print(s)
-    #    describe(d)
     dirsize = calcsize(d)
+    d.updatesize(dirsize)
     if dirsize <= 100000:
-        #        print("ADD")
         totalsize += dirsize
-#    print(d.name, dirsize, "\n")
+    if dirsize <= 30000000 and dirsize > neededspace:
+        deletesize = dirsize
 
-print(totalsize)
+print("Part1:", totalsize)
+print("Part2:", deletesize)
