@@ -39,26 +39,37 @@ class Snake:
 
     def movesnake(self):
         for i in range(1, len(self.snake)):
+            # Test if next slot of snake has same X value, and
+            # Y value is > 1 (should be 2!, not coded that way)
             if (
                 self.snake[i - 1][0] == self.snake[i][0]
                 and abs(self.snake[i - 1][1] - self.snake[i][1]) > 1
             ):
+                # If so, move one position in Y direction
                 self.snake[i][1] += int(
                     (self.snake[i - 1][1] - self.snake[i][1])
                     / abs(self.snake[i - 1][1] - self.snake[i][1])
                 )
+            # Test if next slot of snake has same Y value, and
+            # X value is > 1 (should be 2!, not coded that way)
             elif (
                 self.snake[i - 1][1] == self.snake[i][1]
                 and abs(self.snake[i - 1][0] - self.snake[i][0]) > 1
             ):
+                # If so, move one position in Y direction
                 self.snake[i][0] += int(
                     (self.snake[i - i][0] - self.snake[i][0])
                     / abs(self.snake[i - i][0] - self.snake[i][0])
                 )
             elif (
+                # Test if one axis is more than 1 away. Due to rules
+                # above, the other should also be 1 away.
+                # Will exclude overlapping points (which do not move)
                 abs(self.snake[i - 1][0] - self.snake[i][0]) > 1
                 or abs(self.snake[i - 1][1] - self.snake[i][1]) > 1
             ):
+                # If so, move on the diagonal by one in the appropriate
+                # direction
                 self.snake[i][1] += int(
                     (self.snake[i - 1][1] - self.snake[i][1])
                     / abs(self.snake[i - 1][1] - self.snake[i][1])
