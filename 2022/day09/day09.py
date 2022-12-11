@@ -6,16 +6,6 @@ import sys
 f = open(os.path.join(sys.path[0], "input09.txt"))
 input = f.read()
 
-test = """R 4
-U 4
-L 3
-D 1
-R 4
-D 1
-L 5
-R 2
-"""
-
 
 class Snake:
     def __init__(self, length):
