@@ -6,8 +6,6 @@ import sys
 import numpy as np
 import networkx as nx
 
-from collections import defaultdict
-
 f = open(os.path.join(sys.path[0], "input12.txt"))
 input = f.read()
 
@@ -75,3 +73,25 @@ print("Part1:", nx.dijkstra_path_length(g, source="S", target="E"))
 reversed_path = list(reversed(nx.dijkstra_path(g, source="S", target="E")))
 besta = next((x for x in reversed_path if "a" in x), None)
 print("Part2:", nx.dijkstra_path_length(g, source=besta, target="E"))
+
+print("\nPrinted Path:")
+for x in reversed_path:
+    items = x.split("_")
+    if len(items) == 3:
+        letters[int(items[1]), int(items[2])] = letters[
+            int(items[1]), int(items[2])
+        ].upper()
+
+
+def colored(r, g, b, text):
+    return "\033[38;2;{};{};{}m{}\033[38;2;255;255;255m".format(r, g, b, text)
+
+
+for x in letters:
+    for y in x:
+        if y.isupper():
+            y_color = colored(255, 0, 0, y)
+            print(y_color, end="")
+        else:
+            print(y, end="")
+    print("")
