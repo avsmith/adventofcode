@@ -4,73 +4,9 @@ import os
 import sys
 
 import numpy as np
-
-g = nx.Graph()
+import networkx as nx
 
 from collections import defaultdict
-
-
-class Graph:
-    def __init__(self):
-        """
-        self.edges is a dict of all possible next nodes
-        e.g. {'X': ['A', 'B', 'C', 'E'], ...}
-        self.weights has all the weights between two nodes,
-        with the two nodes as a tuple as the key
-        e.g. {('X', 'A'): 7, ('X', 'B'): 2, ...}
-        """
-        self.edges = defaultdict(list)
-        self.weights = {}
-
-    def add_edge(self, from_node, to_node, weight):
-        # Note: assumes edges are bi-directional
-        self.edges[from_node].append(to_node)
-        #        self.edges[to_node].append(from_node)
-        self.weights[(from_node, to_node)] = weight
-
-
-#        self.weights[(to_node, from_node)] = weight
-
-
-def dijsktra(graph, initial, end):
-    # shortest paths is a dict of nodes
-    # whose value is a tuple of (previous node, weight)
-    shortest_paths = {initial: (None, 0)}
-    current_node = initial
-    visited = set()
-
-    while current_node != end:
-        visited.add(current_node)
-        destinations = graph.edges[current_node]
-        weight_to_current_node = shortest_paths[current_node][1]
-
-        for next_node in destinations:
-            weight = graph.weights[(current_node, next_node)] + weight_to_current_node
-            if next_node not in shortest_paths:
-                shortest_paths[next_node] = (current_node, weight)
-            else:
-                current_shortest_weight = shortest_paths[next_node][1]
-                if current_shortest_weight > weight:
-                    shortest_paths[next_node] = (current_node, weight)
-
-        next_destinations = {
-            node: shortest_paths[node] for node in shortest_paths if node not in visited
-        }
-        if not next_destinations:
-            return "Route Not Possible"
-        # next node is the destination with the lowest weight
-        current_node = min(next_destinations, key=lambda k: next_destinations[k][1])
-
-    # Work back through destinations in shortest path
-    path = []
-    while current_node is not None:
-        path.append(current_node)
-        next_node = shortest_paths[current_node][0]
-        current_node = next_node
-    # Reverse path
-    path = path[::-1]
-    return path
-
 
 f = open(os.path.join(sys.path[0], "input12.txt"))
 input = f.read()
@@ -97,28 +33,45 @@ for line in input.splitlines():
 letters = np.array(letters)
 letters = np.pad(letters, 1, pad_with)
 
-ordinals = []
-for line in input.splitlines():
-    ordinals.append([ord(x.replace("S", "`").replace("E", "{")) for x in line])
+y, x = np.shape(letters)
 
-ordinals = np.array(ordinals)
-ordinals = np.pad(ordinals, 1, pad_with)
+g = nx.DiGraph()
 
-y, x = np.shape(ordinals)
-graph = Graph()
+
+def convert_letter(string):
+    if string == "S":
+        value = ord("a")
+    elif string == "E":
+        value = ord("z")
+    else:
+        value = ord(string)
+    return value
+
 
 for i in range(1, x - 1):
     for j in range(1, y - 1):
-        origin = ordinals[j, i]
+        start = letters[j, i]
         for jj, ii in [(j - 1, i), (j, i - 1), (j + 1, i), (j, i + 1)]:
-            dest = ordinals[jj][ii]
-            if dest <= origin + 1 and dest != 0:
-                origin_text = letters[j, i]
-                dest_text = letters[jj, ii]
-                if origin_text != "S":
-                    origin_text = "_".join([origin_text, str(j), str(i)])
-                if dest_text != "E":
-                    dest_text = "_".join([dest_text, str(jj), str(ii)])
-                graph.add_edge(origin_text, dest_text, 1)
+            target = letters[jj][ii]
+            if (
+                convert_letter(target) <= convert_letter(start)
+                and convert_letter(target) != 0
+            ) or convert_letter(target) == convert_letter(start) + 1:
+                if start != "S":
+                    start_name = "_".join([start, str(j), str(i)])
+                else:
+                    start_name = start
+                if target != "E":
+                    target_name = "_".join([target, str(jj), str(ii)])
+                else:
+                    target_name = target
+                g.add_edge(start_name, target_name)
 
-print(len(dijsktra(graph, "S", "E")) - 1)
+print("Part1:", nx.dijkstra_path_length(g, source="S", target="E"))
+
+# For part2, the last 'a' will be the best one
+# Extract full path and then use the last 'a'
+# to find the length. Done by reversing the full path and finding 'a'
+reversed_path = list(reversed(nx.dijkstra_path(g, source="S", target="E")))
+besta = next((x for x in reversed_path if "a" in x), None)
+print("Part2:", nx.dijkstra_path_length(g, source=besta, target="E"))
