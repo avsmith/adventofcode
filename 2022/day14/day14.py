@@ -29,43 +29,54 @@ def parse_input(text):
     return np.array(data)
 
 
-data = parse_input(input)
+def make_grid(text, part2=False):
+    data = parse_input(text)
+    xo = np.min(data[:, 0])
+    height = np.max(data[:, 1]) + 1 + 2 * part2
+    width = np.max(data[:, 0]) - xo + 1 + 2 * height * part2
 
-xoffset = np.min(data[:, 0])
+    if part2:
+        xo -= height * part2
+
+    grid = np.zeros(
+        (
+            height,
+            width,
+        ),
+        int,
+    )
+
+    for x, y in data:
+        gridx = x - np.min(data[:, 0]) + height * part2
+        gridy = y
+        grid[gridy, gridx] = 2
+
+    if part2:
+        grid[-1, :] = 2
+
+    return grid, xo
 
 
-grid = np.zeros(
-    (
-        np.max(data[:, 1]) + 1,
-        np.max(data[:, 0]) - xoffset + 1,
-    ),
-    int,
-)
-
-for x, y in data:
-    gridx = x - np.min(data[:, 0])
-    gridy = y
-    grid[gridy, gridx] = 2
-
+grid, xoffset = make_grid(input)
 
 curx = 500 - xoffset
 cury = 0
 dimy, dimx = np.shape(grid)
 
 
-def drop(grid, x, y):
-    if grid[y + 1, x] == 0:
+def drop(g, x, y):
+    if g[y + 1, x] == 0:
         return x, y + 1
-    elif grid[y + 1, x - 1] == 0:
+    elif g[y + 1, x - 1] == 0:
         return x - 1, y + 1
-    elif grid[y + 1, x + 1] == 0:
+    elif g[y + 1, x + 1] == 0:
         return x + 1, y + 1
     return x, y
 
 
-def print_grid(grid):
+def print_grid(g):
     count = 1
-    for row in grid:
+    for row in g:
         for item in row:
             if item == 2:
                 print("#", sep="", end="")
@@ -103,3 +114,32 @@ for _ in range(6000):
 print_grid(grid)
 print("Part1:", np.sum(grid == 1))
 # Answer 805
+
+g2, xoff = make_grid(input, True)
+
+
+curx = 500 - xoff
+cury = 0
+dimy, dimx = np.shape(g2)
+
+for _ in range(1000000):
+    nextx, nexty = drop(g2, curx, cury)
+    #    print("outer", curx, cury)
+    while (
+        (nextx != curx or nexty != cury)
+        and nextx >= 0
+        and nextx < dimx
+        and nexty < dimy - 1
+    ):
+        curx, cury = nextx, nexty
+        nextx, nexty = drop(g2, curx, cury)
+    #        print("inner", nextx, nexty)
+    if nextx >= 0 and nexty <= dimy - 2:
+        g2[nexty, nextx] = 1
+    else:
+        break
+    curx = 500 - xoff
+    cury = 0
+
+print("Part2:", np.sum(g2 == 1))
+# Answer 25161
