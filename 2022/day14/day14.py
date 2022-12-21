@@ -12,7 +12,7 @@ test = """498,4 -> 498,6 -> 496,6
 """
 
 data = []
-for line in test.splitlines():
+for line in input.splitlines():
     points = line.split(" -> ")
     collection = []
     for p in points:
@@ -70,24 +70,42 @@ def drop(grid, x, y):
     return x, y
 
 
-for _ in range(25):
+def print_grid(grid):
+    count = 1
+    for row in grid:
+        for item in row:
+            if item == 2:
+                print("#", sep="", end="")
+
+            elif item == 1:
+                print("o", sep="", end="")
+            else:
+                print(".", sep="", end="")
+        print(" ", count, sep="", end="\n")
+        count += 1
+
+    print("", sep="", end="\n")
+
+
+for _ in range(6000):
     nextx, nexty = drop(grid, curx, cury)
     #    print("outer", curx, cury)
     while (
         (nextx != curx or nexty != cury)
         and nextx >= 0
         and nextx < dimx
-        and nexty < dimy
+        and nexty < dimy - 1
     ):
         curx, cury = nextx, nexty
         nextx, nexty = drop(grid, curx, cury)
     #        print("inner", nextx, nexty)
-    if nextx >= 0:
+    if nextx >= 0 and nexty <= dimy - 2:
         grid[nexty, nextx] = 1
     else:
         break
     curx = 500 - xoffset
     cury = 0
-#    print(grid)
+    # print_grid(grid)
 
-print(np.sum(grid == 1))
+print_grid(grid)
+print("Part1:", np.sum(grid == 1))
