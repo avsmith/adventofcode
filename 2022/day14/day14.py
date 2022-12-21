@@ -11,23 +11,28 @@ test = """498,4 -> 498,6 -> 496,6
 503,4 -> 502,4 -> 502,9 -> 494,9
 """
 
-data = []
-for line in input.splitlines():
-    points = line.split(" -> ")
-    collection = []
-    for p in points:
-        (x, y) = p.split(",")
-        collection.append([int(x), int(y)])
-    for e, val in enumerate(collection[1:], start=1):
-        xx = sorted([collection[e - 1][0], collection[e][0]])
-        yy = sorted([collection[e - 1][1], collection[e][1]])
-        for x in range(xx[0], xx[1] + 1):
-            for y in range(yy[0], yy[1] + 1):
-                data.append([x, y])
 
-data = np.array(data)
+def parse_input(text):
+    data = []
+    for line in text.splitlines():
+        points = line.split(" -> ")
+        collection = []
+        for p in points:
+            (x, y) = p.split(",")
+            collection.append([int(x), int(y)])
+        for e, val in enumerate(collection[1:], start=1):
+            xx = sorted([collection[e - 1][0], collection[e][0]])
+            yy = sorted([collection[e - 1][1], collection[e][1]])
+            for x in range(xx[0], xx[1] + 1):
+                for y in range(yy[0], yy[1] + 1):
+                    data.append([x, y])
+    return np.array(data)
+
+
+data = parse_input(input)
 
 xoffset = np.min(data[:, 0])
+
 
 grid = np.zeros(
     (
@@ -41,18 +46,6 @@ for x, y in data:
     gridx = x - np.min(data[:, 0])
     gridy = y
     grid[gridy, gridx] = 2
-
-# print(grid)
-
-
-def stuck(grid, x, y):
-    if grid[y + 1, x] != 0 and grid[y + 1, x - 1] != 0 and grid[y + 1, x + 1]:
-        return True
-    return False
-
-
-def sand(grid, x, y):
-    None
 
 
 curx = 500 - xoffset
@@ -109,3 +102,4 @@ for _ in range(6000):
 
 print_grid(grid)
 print("Part1:", np.sum(grid == 1))
+# Answer 805
