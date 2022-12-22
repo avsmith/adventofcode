@@ -122,7 +122,7 @@ curx = 500 - xoff
 cury = 0
 dimy, dimx = np.shape(g2)
 
-for _ in range(1000000):
+for _ in range(100000):
     nextx, nexty = drop(g2, curx, cury)
     #    print("outer", curx, cury)
     while (
@@ -141,5 +141,54 @@ for _ in range(1000000):
     curx = 500 - xoff
     cury = 0
 
+
+import pygame
+import random
+
+
+def print_grid2(g):
+
+    height, width = np.shape(g)
+    scale = 3
+
+    screen = pygame.display.set_mode((width * scale, height * scale))
+    clock = pygame.time.Clock()
+    running = True
+
+    while running:
+        for x in range(width):
+            for y in range(height):
+                item = g[y, x]
+                if item == 2:
+                    pygame.draw.rect(
+                        screen,
+                        "red1",
+                        pygame.Rect(scale * x, scale * y, scale - 1, scale - 1),
+                    )
+                if item == 1:
+                    pygame.draw.rect(
+                        screen,
+                        "antiquewhite",
+                        pygame.Rect(scale * x, scale * y, scale - 1, scale - 1),
+                    )
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+        pygame.display.flip()
+        clock.tick(240)
+
+
+#    for xx in range(x):
+#        for yy in range(y):
+#            item = g[xx, yy]
+#            if item == 2:
+#                print(item)
+#               window.set_at((x, y), (255, 0, 0))
+#   pygame.display.update()
+
+
 print("Part2:", np.sum(g2 == 1))
+print_grid2(g2)
 # Answer 25161
