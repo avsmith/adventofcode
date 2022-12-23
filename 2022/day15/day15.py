@@ -29,33 +29,49 @@ def manhattan(x1, y1, x2, y2):
 
 
 class Sensor:
-    def __init__(self, sx, sy, bx, by, addsensor=False):
+    def __init__(self, sx, sy, bx, by):
         self.sensor = [sx, sy]
         self.beacon = [bx, by]
         self.dist = manhattan(*self.sensor, *self.beacon)
-        self.nosensor = []
-        if addsensor:
-            for xx in range(sx - self.dist, sx + self.dist + 1):
-                for yy in range(sy - self.dist, sy + self.dist + 1):
-                    if (
-                        manhattan(*self.sensor, xx, yy) <= self.dist
-                        and manhattan(*self.sensor, xx, yy) != 0
-                    ):
-                        self.nosensor.append([int(xx), int(yy)])
+        self.targets = list()
+
+    def checktarget(self, target):
+        sx, sy = self.sensor
+        bx, by = self.beacon
+
+        for xx in range(sx - self.dist, sx + self.dist + 1):
+            if (
+                manhattan(*self.sensor, xx, target) <= self.dist
+                and manhattan(*self.sensor, xx, target) != 0
+            ):
+                self.targets.append([int(xx), int(target)])
+            else:
+                None
 
     def __str__(self):
-        return f"Sensor = {self.sensor[0]},{self.sensor[1]}; Beacon = {self.beacon[0]},{self.beacon[1]}; Distance = {self.dist}; Clear  = {self.nosensor}"
+        if self.addsensor:
+            return f"Sensor = {self.sensor[0]},{self.sensor[1]}; Beacon = {self.beacon[0]},{self.beacon[1]}; Distance = {self.dist}; Clear  = {self.nosensor}"
+        else:
+            return f"Sensor = {self.sensor[0]},{self.sensor[1]}; Beacon = {self.beacon[0]},{self.beacon[1]}; Distance = {self.dist}"
 
 
 sensors = []
 
+target = 10
+
 for line in test.splitlines():
     sensx, sensy, beacx, beacy = [int(s) for s in re.findall(r"\b\d+\b", line)]
-    sensors.append(Sensor(sensx, sensy, beacx, beacy, True))
+    sens = Sensor(sensx, sensy, beacx, beacy)
+    sens.checktarget(target)
+    sensors.append(sens)
 
-target = 10
-open_sites = set([tuple(x) for s in sensors for x in s.nosensor if x[0] == target])
+target_sites = set([tuple(x) for s in sensors for x in s.targets if x[1] == target])
 
-# sensor_locations = set([tuple(s.sensor) for s in sensors if s.sensor[0] == target])
+sensor_locations = set([tuple(s.sensor) for s in sensors if s.sensor[1] == target])
+beacon_locations = set([tuple(s.beacon) for s in sensors if s.beacon[1] == target])
 
-print(len(open_sites))
+print("Part1:", len(target_sites - sensor_locations - beacon_locations))
+
+# for s in sensors:
+#    print(s)
+#    print(s.targets)
