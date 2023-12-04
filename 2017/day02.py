@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-DATA = '''\
+DATA = """\
 1136    1129    184     452     788     1215    355     1109    224     1358    1278    176     1302    186     128     1148
 242     53      252     62      40      55      265     283     38      157     259     226     322     48      324     299
 2330    448     268     2703    1695    2010    3930    3923    179     3607    217     3632    1252    231     286     3689
@@ -17,44 +17,48 @@ DATA = '''\
 839     253     1680    108     349     1603    1724    172     140     167     181     38      1758    1577    748     1011
 1165    1251    702     282     1178    834     211     1298    382     1339    67      914     1273    76      81      71
 6151    5857    4865    437     6210    237     37      410     544     214     233     6532    2114    207     5643    6852
-'''
-#print(DATA.splitlines())
+"""
+# print(DATA.splitlines())
 print("\n\n ==== STAR 1 =====\n")
 
+
 def linediff(sp):
-  min = int(sp[0])
-  max = int(sp[0])
-  for i in range(len(sp)):
-    cur = int(sp[i])
-    if(cur > max):
-      max = cur
-    if(cur < min):
-      min = cur
-  return(max-min)
+    min = int(sp[0])
+    max = int(sp[0])
+    for i in range(len(sp)):
+        cur = int(sp[i])
+        if cur > max:
+            max = cur
+        if cur < min:
+            min = cur
+    return max - min
+
 
 checksum = 0
 
 for line in DATA.splitlines():
-  checksum += linediff(line.split())
+    checksum += linediff(line.split())
 
 print("Answer star #1: {}".format(checksum))
 
 ## Work for star #2
 
+
 def linediv(sp):
-  for i in range(len(sp)):
-    for j in range(i+1,len(sp)):
-      inti = int(sp[i])
-      intj = int(sp[j])
-      if inti % intj == 0:
-        return(int(inti/intj))
-      if intj % inti == 0:
-        return(int(intj/inti))
+    for i in range(len(sp)):
+        for j in range(i + 1, len(sp)):
+            inti = int(sp[i])
+            intj = int(sp[j])
+            if inti % intj == 0:
+                return int(inti / intj)
+            if intj % inti == 0:
+                return int(intj / inti)
+
 
 checksum2 = 0
 print("\n\n ==== STAR 2 =====\n")
 for line in DATA.splitlines():
-  values  = line.split()
-  checksum2 += linediv(values)
+    values = line.split()
+    checksum2 += linediv(values)
 
 print("Answer star #2: {}".format(checksum2))

@@ -493,6 +493,7 @@ class Cube:
     def zmax(self):
         return max(self.z1, self.z2)
 
+
 cubes = []
 
 for line in input.splitlines():
@@ -502,8 +503,5 @@ for line in input.splitlines():
     cube = Cube(*values, state)
     cubes.append(cube)
 
-#for i in range(len(cubes)):
+# for i in range(len(cubes)):
 #    for j in range(i+i, len(cubes)):
-
-
-

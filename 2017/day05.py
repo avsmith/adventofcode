@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-DATA = '''\
+DATA = """\
 2
 1
 -1
@@ -1071,25 +1071,27 @@ DATA = '''\
 -298
 -793
 -278
-'''
+"""
 
 origvalues = [int(i) for i in DATA.splitlines()]
-testvalues= [0, 3, 0, 1, -3]
+testvalues = [0, 3, 0, 1, -3]
+
 
 def num_steps(val, weird=False):
-  pos = 0
-  steps = 0
-  while pos >= 0 and pos<len(val):
-    offset = val[pos]
-    if weird and offset >= 3:
-      val[pos] -= 1
-    else:
-      val[pos] += 1
-    pos += offset
-    steps += 1
-  return(steps)
+    pos = 0
+    steps = 0
+    while pos >= 0 and pos < len(val):
+        offset = val[pos]
+        if weird and offset >= 3:
+            val[pos] -= 1
+        else:
+            val[pos] += 1
+        pos += offset
+        steps += 1
+    return steps
+
 
 values = list(origvalues)
-print('Answer Star #1: {}'.format(num_steps(values)))
+print("Answer Star #1: {}".format(num_steps(values)))
 values = list(origvalues)
-print('Answer Star #2: {}'.format(num_steps(values, True)))
+print("Answer Star #2: {}".format(num_steps(values, True)))

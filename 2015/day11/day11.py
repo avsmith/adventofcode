@@ -18,7 +18,7 @@ def base_10_to_alphabet(number):
 
 def base_alphabet_to_10(letters):
     return sum(
-        (ord(letter) - A_LOWERCASE + 1) * ALPHABET_SIZE ** i
+        (ord(letter) - A_LOWERCASE + 1) * ALPHABET_SIZE**i
         for i, letter in enumerate(reversed(letters.lower()))
     )
 
