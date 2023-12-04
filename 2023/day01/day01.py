@@ -2,7 +2,6 @@
 
 import os
 import sys
-import re
 
 # For part 2, crazy substitute due to overlapping patterns
 number_dict = {
@@ -22,9 +21,7 @@ def replace_words(s):
 		s = s.replace(k,v)
 	return(s)
 	
-def get_digits(text, substitute = False):
-	if substitute:
-		text = replace_words(text)
+def get_digits(text):
 	nums = ''.join(c for c in text if c.isdigit())
 	reduced = nums[0] + nums[-1]
 	return(int(reduced))
@@ -32,8 +29,8 @@ def get_digits(text, substitute = False):
 f = open(os.path.join(sys.path[0], "input01.txt"))
 input = f.read()
 
-part1 = [get_digits(x, False) for x in input.splitlines()]
-part2 = [get_digits(x, True) for x in input.splitlines()]
+part1 = [get_digits(x) for x in input.splitlines()]
+part2 = [get_digits(replace_words(x)) for x in input.splitlines()]
 
 print("Part 1:", sum(part1))
 print("Part 2:", sum(part2))
