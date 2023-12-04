@@ -45,7 +45,6 @@ score = 0
 
 for line in input.splitlines():
     game, sets = line.split(": ")
-    # print(int(game[5:]))
     good = True
     for set in sets.split("; "):
         if legal_game(set) and good:
@@ -56,3 +55,26 @@ for line in input.splitlines():
         score += int(game[5:])
 
 print("Part1:", score)
+
+
+def game_score(sets):
+    min_balls = {
+        "red": 0,
+        "green": 0,
+        "blue": 0,
+    }
+    for balls in sets.split("; "):
+        for b in balls.split(", "):
+            num, color = b.split(" ")
+            if min_balls[color] < int(num):
+                min_balls[color] = int(num)
+    return min_balls["red"] * min_balls["blue"] * min_balls["green"]
+
+
+powers = 0
+
+for line in input.splitlines():
+    game, sets = line.split(": ")
+    powers += game_score(sets)
+
+print("Part2:", powers)
