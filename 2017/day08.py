@@ -2,14 +2,14 @@
 
 import re
 
-TESTDATA = '''\
+TESTDATA = """\
 b inc 5 if a > 1
 a inc 1 if b < 5
 c dec -10 if a >= 1
 c inc -20 if c == 10
-'''
+"""
 
-DATA = '''\
+DATA = """\
 ioe dec 890 if qk > -10
 gif inc -533 if qt <= 7
 itw dec 894 if t != 0
@@ -1010,12 +1010,12 @@ iyu inc 757 if hfh != 1479
 uoc inc -765 if yg != -1415
 bi inc 637 if nwe == -3005
 ih dec 369 if ih == 1993
-'''
+"""
 
 regs = dict()
 for line in DATA.splitlines():
-  reg, rest = line.split(' ',1)
-  regs[reg] = 0
+    reg, rest = line.split(" ", 1)
+    regs[reg] = 0
 #  rest = rest.replace('inc','+=').replace('dec','-=')
 #  oper, amt, ifstate, testreg, cond, testamt = rest.split()
 #  text = R"regs[\'{}'] {} {} if regs['{}'] {} {}".format(reg, oper, amt, testreg, cond, testamt)
@@ -1023,25 +1023,25 @@ for line in DATA.splitlines():
 
 maxreg = 0
 for line in DATA.splitlines():
-  reg, oper, amt, ifstate, testreg, cond, testamt = line.split()
-  testval = regs[testreg]
-  if eval('testval {} {}'.format(cond,testamt)):
-    if oper == 'inc':
-      regs[reg] += int(amt)
-    else:
-      regs[reg] -= int(amt)
-  if regs[reg] > maxreg:
-    maxreg = regs[reg]
+    reg, oper, amt, ifstate, testreg, cond, testamt = line.split()
+    testval = regs[testreg]
+    if eval("testval {} {}".format(cond, testamt)):
+        if oper == "inc":
+            regs[reg] += int(amt)
+        else:
+            regs[reg] -= int(amt)
+    if regs[reg] > maxreg:
+        maxreg = regs[reg]
 
 maxval = 0
 for v in regs.values():
-  if v > maxval:
-    maxval = v
+    if v > maxval:
+        maxval = v
 
 print(maxval)
 print(maxreg)
 
-#for e in evallines:
+# for e in evallines:
 #  eval(e)
 #  print('yes')
-#print(regs)
+# print(regs)

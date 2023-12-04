@@ -11,10 +11,10 @@ limit = 2147483647
 
 count = 0
 
-for i in range(40 * 10 ** 6):
+for i in range(40 * 10**6):
     num1 = (fac1 * num1) % limit
     num2 = (fac2 * num2) % limit
-    if (num1 % 2 ** 16) == (num2 % 2 ** 16):
+    if (num1 % 2**16) == (num2 % 2**16):
         count += 1
 
 print("Star 1: {}".format(count))
@@ -38,11 +38,11 @@ def generator(num, fac, limit, divisor):
 num1 = 591
 num2 = 393
 
-while checked < 5 * 10 ** 6:
+while checked < 5 * 10**6:
     num1 = generator(num1, fac1, limit, 4)
     num2 = generator(num2, fac2, limit, 8)
     checked += 1
-    if (num1 % 2 ** 16) == (num2 % 2 ** 16):
+    if (num1 % 2**16) == (num2 % 2**16):
         count2 += 1
 
 print("Star 2: {}".format(count2))

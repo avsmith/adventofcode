@@ -31,7 +31,10 @@ def make_grid(xy):
 
 
 def print_grid(grid):
-    print(*["".join(map(str, row)).replace("1","#").replace("0"," ") for row in grid], sep="\n")
+    print(
+        *["".join(map(str, row)).replace("1", "#").replace("0", " ") for row in grid],
+        sep="\n"
+    )
 
 
 grid = make_grid(positions)
@@ -43,11 +46,11 @@ for i, fold in enumerate(folds):
         axis = fold[1]
         left = grid[:, :axis]
         right = grid[:, axis + 1 :]
-        xneed =  np.shape(left)[1] - np.shape(right)[1]
+        xneed = np.shape(left)[1] - np.shape(right)[1]
         if xneed > 0:
             ydim = np.shape(grid)[0]
             xpadding = np.zeros((ydim, xneed))
-            right = np.append( right, xpadding, axis=1)
+            right = np.append(right, xpadding, axis=1)
         right_flip = np.flip(right, axis=1)
         newgrid = np.where((left + right_flip) > 0, 1, 0)
     elif fold[0] == "y":
@@ -68,5 +71,5 @@ for i, fold in enumerate(folds):
 
 print("Part 1:", part1)
 print()
-print("Part 2:", "\n" )
+print("Part 2:", "\n")
 print_grid(grid)

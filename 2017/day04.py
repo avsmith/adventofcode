@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-DATA = '''\
+DATA = """\
 oaoe rxeq vssdqtu xrk cjv yaoqp loo
 mveua dogbam szydvri hyzk lbega abzqw xwjn wniug kwbre
 npaoy uivpxwd oynpa rcdk uixpvdw
@@ -513,34 +513,37 @@ khuvrne rnamlgt akjtu qlx odr git xmiazr icwsxsq
 jfm bneh tkdzuad bsr oruvmqq uauw zjlp gwov hot jkjbex
 jjo uvk vlpy lpxd irntb uvk ehhsqv fxhvt jjo fpa
 qrwu mgnw hvflf ytspp mco ikvbqg fflvh wts cbbf
-'''
+"""
 
 print("\n\n ==== STAR 1 =====\n")
 
-def legalpass(sp, palindroms = False):
-  if(palindroms):
-    sp = [sortchar(word) for word in sp]
-  if(len(sp) == len(set(sp))):
-    return(True)
-  else:
-    return(False)
+
+def legalpass(sp, palindroms=False):
+    if palindroms:
+        sp = [sortchar(word) for word in sp]
+    if len(sp) == len(set(sp)):
+        return True
+    else:
+        return False
+
 
 def sortchar(words):
-  return(''.join(sorted(list(words))))
+    return "".join(sorted(list(words)))
+
 
 numlegal = 0
 
 for line in DATA.splitlines():
-  if(legalpass(line.split())):
-    numlegal += 1
+    if legalpass(line.split()):
+        numlegal += 1
 
 print("Answer star #1: {}".format(numlegal))
 
 print("\n\n ==== STAR 2 =====\n")
 
-numlegal2 = 0 
+numlegal2 = 0
 for line in DATA.splitlines():
-  if(legalpass(line.split(), True)):
-    numlegal2 += 1
+    if legalpass(line.split(), True):
+        numlegal2 += 1
 
 print("Answer star #2: {}".format(numlegal2))

@@ -36,7 +36,7 @@ def dance(text):
     return text
 
 
-def dancesteps(text, max=10 ** 6):
+def dancesteps(text, max=10**6):
     starttext = text
     for i in range(max):
         text = dance(text)
@@ -60,4 +60,4 @@ text = list(string.ascii_lowercase[:16])
 
 print("".join(dance(text)))
 text = list(string.ascii_lowercase[:16])
-print("".join(dancecard(text, 10 ** 9)))
+print("".join(dancecard(text, 10**9)))

@@ -8,13 +8,18 @@ import numpy as np
 f = open(os.path.join(sys.path[0], "input10.txt"))
 input = f.read()
 
+
 def pair_replace(string):
-    string = string.replace("{}", "").replace("[]", "").replace("<>", "").replace("()", "")
+    string = (
+        string.replace("{}", "").replace("[]", "").replace("<>", "").replace("()", "")
+    )
     return string
+
 
 def left_replace(string):
     string = string.replace("{", "").replace("[", "").replace("<", "").replace("(", "")
     return string
+
 
 def full_pair_replace(string):
     replaced = pair_replace(string)
@@ -22,6 +27,7 @@ def full_pair_replace(string):
         return string
     else:
         return full_pair_replace(replaced)
+
 
 def full_left_replace(string):
     replaced = left_replace(string)
@@ -35,7 +41,7 @@ def fix_string(string):
     # Recursively replaces pairs of character
     reduced = full_pair_replace(string)
     # Recurrively replaces first left bracket
-    leftgone= full_left_replace(reduced)
+    leftgone = full_left_replace(reduced)
     return reduced, leftgone
 
 
@@ -48,7 +54,7 @@ def fix_score(string):
     # }: 3 points.
     # >: 4 points.
 
-    for i in range(-1,-1*(len(fixable)+1),-1):
+    for i in range(-1, -1 * (len(fixable) + 1), -1):
         c = fixable[i]
         if c == "(":
             score *= 5
@@ -64,6 +70,7 @@ def fix_score(string):
             score += 4
     return score
 
+
 def string_error(string):
     reduced, leftgone = fix_string(string)
 
@@ -71,13 +78,14 @@ def string_error(string):
 
     if first == ")":
         return 3
-    elif first=="]":
+    elif first == "]":
         return 57
-    elif first=="}":
+    elif first == "}":
         return 1197
-    elif first==">":
+    elif first == ">":
         return 25137
     return 0
+
 
 fix_scores = []
 total = 0

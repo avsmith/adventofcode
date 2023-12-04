@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-TESTDATA = '''\
+TESTDATA = """\
 pbga (66)
 xhth (57)
 ebii (61)
@@ -14,9 +14,9 @@ jptl (61)
 ugml (68) -> gyxo, ebii, jptl
 gyxo (61)
 cntj (57)
-'''
+"""
 
-DATA = '''\
+DATA = """\
 dihjv (2158) -> gausx, ncdmp, hozgrub
 qhvca (428) -> odttvb, ymehff, ymyzbqc, jtdtmsi, wciuyuh
 kuvqhnm (77)
@@ -1255,71 +1255,72 @@ gvlbzp (78)
 yaqiuq (272) -> aonteu, kafnt, ylpapdi
 cypwd (14)
 ihhmv (72)
-'''
+"""
 
-tower =dict()
+tower = dict()
 parents = list()
 children = list()
 pedigree = dict()
 weights = dict()
 
 for line in DATA.splitlines():
-  bearing = line.find('->')
-  id = line[:line.find(' ')]
-  weight = int(line[line.find('(')+1:line.find(')')])
-  weights[id] = weight
-  if(bearing > 0):
-    offspring = line[(line.find('->')+3):].split(', ') 
-    children.extend(offspring)
-    parents.append(id)
-    pedigree[id] =  offspring
+    bearing = line.find("->")
+    id = line[: line.find(" ")]
+    weight = int(line[line.find("(") + 1 : line.find(")")])
+    weights[id] = weight
+    if bearing > 0:
+        offspring = line[(line.find("->") + 3) :].split(", ")
+        children.extend(offspring)
+        parents.append(id)
+        pedigree[id] = offspring
+
 
 def calc_w(id, ped, weights):
-  weight = weights[id]
-  if id in ped.keys():
-    for c in ped[id]:
-      weight += calc_w(c,ped,weights)
-  return(weight)
-
-def balance_check(children,ped,weights):
-  weights_seen = []
-  results = dict()
-  balanced = bool()
-  for c in children:
-    weights_seen.append(calc_w(c,ped,weights))
-  if len(set(weights_seen)) == 1:
-    balanced = True
-  else:
-    balanced = False
-  results['weights'] = dict(zip(children,weights_seen))
-  results['balanced'] = balanced
+    weight = weights[id]
+    if id in ped.keys():
+        for c in ped[id]:
+            weight += calc_w(c, ped, weights)
+    return weight
 
 
-  return(results)
-  
+def balance_check(children, ped, weights):
+    weights_seen = []
+    results = dict()
+    balanced = bool()
+    for c in children:
+        weights_seen.append(calc_w(c, ped, weights))
+    if len(set(weights_seen)) == 1:
+        balanced = True
+    else:
+        balanced = False
+    results["weights"] = dict(zip(children, weights_seen))
+    results["balanced"] = balanced
 
-founders = list(set(parents)-set(children))
+    return results
 
-founder = ''
-if(len(founders) == 1):
-  founder = founders[0]
 
-print('Founder for Star #1: {}'.format(founder))
+founders = list(set(parents) - set(children))
 
-print('\n\n==== STAR 2 ====\n')
-print('Unbalanced branches')
+founder = ""
+if len(founders) == 1:
+    founder = founders[0]
+
+print("Founder for Star #1: {}".format(founder))
+
+print("\n\n==== STAR 2 ====\n")
+print("Unbalanced branches")
 for par, chi in pedigree.items():
-  bal = balance_check(chi,pedigree,weights)
-  if not bal['balanced']:
-    print(par,bal['weights'])
+    bal = balance_check(chi, pedigree, weights)
+    if not bal["balanced"]:
+        print(par, bal["weights"])
 
 # Manual fix based on previous printout
-weights['lnpuarm'] -=  8 
-print('\nAfter fix (hope for no output)\n')
+weights["lnpuarm"] -= 8
+print("\nAfter fix (hope for no output)\n")
 for par, chi in pedigree.items():
-  bal = balance_check(chi,pedigree,weights)
-  if not bal['balanced']:
-    print(par,bal)
+    bal = balance_check(chi, pedigree, weights)
+    if not bal["balanced"]:
+        print(par, bal)
 
 
-print('Changed weight for Star #2: {}'.format(weights['lnpuarm']))
+print("Changed weight for Star #2: {}".format(weights["lnpuarm"]))

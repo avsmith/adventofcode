@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-TESTDATA = '''\
+TESTDATA = """\
 0 <-> 2
 1 <-> 1
 2 <-> 0, 3, 4
@@ -8,9 +8,9 @@ TESTDATA = '''\
 4 <-> 2, 3, 6
 5 <-> 6
 6 <-> 4, 5
-'''
+"""
 
-DATA = '''\
+DATA = """\
 0 <-> 396, 1867
 1 <-> 1749
 2 <-> 466, 675, 1661
@@ -2011,46 +2011,47 @@ DATA = '''\
 1997 <-> 1682, 1894
 1998 <-> 1351, 1769
 1999 <-> 1374
-'''
+"""
 
 map = dict()
 
 for line in DATA.splitlines():
-	source, target = line.split(' <-> ')
-	targets = target.split(', ')
-	map[source] = targets
+    source, target = line.split(" <-> ")
+    targets = target.split(", ")
+    map[source] = targets
 
-seed = '0'
+seed = "0"
+
 
 def makegroup(seed, map):
-	grouped = [seed]
-	size = len(set(grouped))
-	growing = True
+    grouped = [seed]
+    size = len(set(grouped))
+    growing = True
 
-	while growing:
-		for i in grouped:
-			if i in map.keys():
-				grouped = grouped + map[i]
-		grouped = list(set(grouped))
-		resize = len(grouped)
-		if resize > size:
-			size = resize
-		else:
-			growing = False
-	return grouped
-	
+    while growing:
+        for i in grouped:
+            if i in map.keys():
+                grouped = grouped + map[i]
+        grouped = list(set(grouped))
+        resize = len(grouped)
+        if resize > size:
+            size = resize
+        else:
+            growing = False
+    return grouped
+
+
 group0 = makegroup(seed, map)
 
-print('Star 1: {}'.format(len(group0)))
+print("Star 1: {}".format(len(group0)))
 
 ingroup = group0
 groups = [group0]
 
 while len(ingroup) < len(map.keys()):
-	ungrouped = list(set(map.keys() - set(ingroup)))
-	newgroup = makegroup(ungrouped[0], map)
-	ingroup = list(set(ingroup + newgroup))
-	groups.append(newgroup)
-	
-print('Star 2: {}'.format(len(groups)))
+    ungrouped = list(set(map.keys() - set(ingroup)))
+    newgroup = makegroup(ungrouped[0], map)
+    ingroup = list(set(ingroup + newgroup))
+    groups.append(newgroup)
 
+print("Star 2: {}".format(len(groups)))

@@ -14,7 +14,7 @@ def bit_set(list, bit):
     for x in list:
         if x & (1 << bit):
             count += 1
-    if count >= len(list)/2:
+    if count >= len(list) / 2:
         return True
 
 
@@ -22,19 +22,20 @@ gamma = 0
 epsilon = 0
 
 for x in range(max(data).bit_length(), 0, -1):
-    if bit_set(data, x-1):
-        gamma ^= 2**(x-1)
+    if bit_set(data, x - 1):
+        gamma ^= 2 ** (x - 1)
     else:
-        epsilon ^= 2**(x-1)
+        epsilon ^= 2 ** (x - 1)
 
-print("Part 1:", gamma*epsilon)
+print("Part 1:", gamma * epsilon)
+
 
 def oxygen(list, bit):
     if bit_set(list, bit):
         new = [x for x in list if x & (1 << bit)]
     else:
         new = [x for x in list if not x & (1 << bit)]
-    return(new)
+    return new
 
 
 def co2(list, bit):
@@ -42,7 +43,7 @@ def co2(list, bit):
         new = [x for x in list if not x & (1 << bit)]
     else:
         new = [x for x in list if x & (1 << bit)]
-    return(new)
+    return new
 
 
 oxy = [int(x, 2) for x in input.splitlines()]
@@ -59,4 +60,4 @@ while len(dioxy) > 1:
     dioxy = co2(dioxy, dioxy_pos)
     dioxy_pos -= 1
 
-print("Part 2:", oxy[0]*dioxy[0])
+print("Part 2:", oxy[0] * dioxy[0])
