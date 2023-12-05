@@ -10,6 +10,7 @@ input = f.read()
 lines = input.splitlines()
 
 
+# Borrowed
 class NestedDefaultDict(defaultdict):
     def __init__(self, *args, **kwargs):
         super(NestedDefaultDict, self).__init__(NestedDefaultDict, *args, **kwargs)
@@ -19,6 +20,7 @@ class NestedDefaultDict(defaultdict):
 
 
 matches = NestedDefaultDict()
+gears = NestedDefaultDict()
 
 
 test = """467..114..
@@ -51,13 +53,37 @@ def test_id(line, start, end):
 
 score = 0
 
+
 for l in range(len(lines)):
     for match in re.finditer(r"\d+", lines[l]):
-        # 		print(l, match.group(), match.start(), match.end())
         result = test_id(l, match.start(), match.end())
-        # 		print(result, match.group())
+
+        for x in range(match.start(), match.end()):
+            gears[l][x] = int(match.group())
         if result:
             score += int(match.group())
 
 
 print("Part1:", score)
+
+matched = list()
+
+score2 = 0
+
+for l, vals in matches.items():
+    for pos, match in vals.items():
+        if match:
+            matched = list()
+            for x in range(l - 1, l + 2):
+                for y in range(pos - 1, pos + 2):
+                    if isinstance(gears[x][y], int):
+                        matched.append(gears[x][y])
+            # This finds unique gears
+            # Will break if there are two different
+            # Gears with the same value
+            # Worked as a solution
+            matched = list(set(matched))
+            if len(matched) == 2:
+                score2 += matched[0] * matched[1]
+
+print("Part2:", score2)
