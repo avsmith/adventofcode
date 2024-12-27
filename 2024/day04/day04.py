@@ -7,6 +7,8 @@ import collections
 f = open(os.path.join(sys.path[0], "input04.txt"))
 input = f.read()
 
+# Based heavily on https://zhaqenl.github.io/en/wordsearch/
+# I did work out the extension to cover part2
 
 def matrixify(grid, separator="\n"):
     return grid.split(separator)
