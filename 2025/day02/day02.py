@@ -13,15 +13,21 @@ def split_range(txt):
 	start, end = txt.split("-")
 	return([int(start),int(end)])
 
-def code_invalidity(x):
+def code_invalidity(x,part2=False):
 	xc = str(x)
 	lx = len(xc)
-	if lx % 2 == 0:
-		if xc[lx//2:] == xc[:lx//2]:
-			return True
-		else:
-			return False
-	
+	if part2:
+		for s in range(1,lx):
+			if lx % s == 0:
+				parts = [int(xc[i:i+s]) for i in range(0, len(xc), s)]
+				if all(x == parts[0] for x in parts):
+					return True
+	else:
+		if lx % 2 == 0:
+			if xc[lx//2:] == xc[:lx//2]:
+				return True
+			else:
+				return False
 	return False
 	
 
@@ -34,7 +40,9 @@ for r in ranges:
 	for x in range(start,end+1):
 		if code_invalidity(x):
 			tot += x
-		tot2 += x
+		if code_invalidity(x, True):
+			tot2 += x
 
 		
-print(tot)
+print("Part1:", tot)
+print("Part2:", tot2)
