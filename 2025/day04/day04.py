@@ -2,27 +2,14 @@
 
 from pathlib import Path
 
-test = """..@@.@@@@.
-@@@.@.@.@@
-@@@@@.@.@@
-@.@@@@..@.
-@@.@@@@.@@
-.@@@@@@@.@
-.@.@.@.@@@
-@.@@@.@@@@
-.@@@@@@@@.
-@.@.@@@.@.
-"""
 text = Path("input04.txt").read_text()
 
 mat = [
     [1 if c == "@" else 0 for c in line.strip()] for line in text.strip().splitlines()
 ]
 
-
 def stacked_pallets(matrix, row, col):
     pallets = 0
-    # Define possible neighbor offsets: (delta_row, delta_col)
     neighbors = [(1, 1), (1, 0), (1, -1), (0, 1), (0, -1), (-1, 1), (-1, 0), (-1, -1)]
 
     # Get matrix dimensions
@@ -37,13 +24,22 @@ def stacked_pallets(matrix, row, col):
         return True
     return False
 
+
 def accessable(m):
     available = []
-    for i, row in enumerate(mat):
+    for i, row in enumerate(m):
         for j, value in enumerate(row):
             if mat[i][j] == 1 and stacked_pallets(mat, i, j):
-                available.append( (i, j))
-    return(available)
+                available.append((i, j))
+    return available
 
 
-print(len(accessable(mat)))
+print("Part1:", len(accessable(mat)))
+
+removed = 0
+while len(accessable(mat)) > 0:
+    removed += len(accessable(mat))
+    for i, j in accessable(mat):
+        mat[i][j] = 0
+
+print("Part2:", removed)
