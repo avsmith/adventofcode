@@ -6,16 +6,10 @@ import sys
 import numpy as np
 import itertools
 
-testdata = """987654321111111
-811111111111119
-234234234234278
-818181911112111
-"""
-
 f = open(os.path.join(sys.path[0], "input03.txt"))
 data = f.read()
 
-input = testdata.splitlines()
+input = data.splitlines()
         
 def find_digit(input, size=2, output=''):
     ints = [int(d) for d in input]
@@ -34,5 +28,10 @@ def find_digit(input, size=2, output=''):
 part1 = 0
 for x in input:
     part1 += int(find_digit(x))
-print(part1)
+print("Part1:", part1)
+
+part2 = 0
+for x in input:
+    part2 += int(find_digit(x,12))
+print("Part2:", part2)
            
