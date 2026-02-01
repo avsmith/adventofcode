@@ -5,38 +5,24 @@ import portion as p
 
 text = Path("input05.txt").read_text()
 
-test = """3-5
-10-14
-16-20
-12-18
 
-1
-5
-8
-11
-17
-32
-"""
-
-intervals, values = text.split("\n\n")
+interval_text, value_text = text.split("\n\n")
 
 interval_set = p.empty()
 
-for interval in intervals.splitlines():
-	left, right = interval.split("-")
-	interval_set =  interval_set | p.closed(int(left),int(right))
+for line in interval_text.splitlines():
+	left, right = map(int, line.split("-"))
+	interval_set |= p.closed(left, right)
 
-fresh = 0
-
-for v in values.splitlines():
-	v = int(v)
+count_values_in_intervals = 0
+for v in map(int, value_text.splitlines()):
 	if v in interval_set:
-		fresh+= 1
-		
-print(fresh)
+		count_values_in_intervals += 1
 
-fresh2 = 0
-for i in interval_set:
-	fresh2 += i.upper-i.lower+1
-	
-print(fresh2)
+print(count_values_in_intervals)
+
+interval_size = 0
+for interval in interval_set:
+	interval_size += interval.upper - interval.lower + 1
+
+print(interval_size)
