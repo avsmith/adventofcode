@@ -25,7 +25,7 @@ def stacked_pallets(matrix, row, col):
     return False
 
 
-def accessable(m):
+def accessible(m):
     available = []
     for i, row in enumerate(m):
         for j, value in enumerate(row):
@@ -34,12 +34,16 @@ def accessable(m):
     return available
 
 
-print("Part1:", len(accessable(mat)))
+print("Part1:", len(accessible(mat)))
 
 removed = 0
-while len(accessable(mat)) > 0:
-    removed += len(accessable(mat))
-    for i, j in accessable(mat):
+
+while True:
+    acc = accessible(mat)
+    if not acc:
+        break
+    removed += len(acc)
+    for i, j in acc:
         mat[i][j] = 0
 
 print("Part2:", removed)
