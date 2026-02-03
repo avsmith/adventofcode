@@ -26,14 +26,30 @@ def part1(lines: list[str]) -> int:
 
     return split_count
 
+def part2(lines: list[str]) -> int:
+    matrix = parse_matrix(lines)
+    counts = matrix[0]
+    for i, line in enumerate(matrix[:-1]):
+        next_counts = [0]*len(line)
+        beams = [i for i, c in enumerate(counts) if c > 0 ]
+        next_blocks = [i for i, c in enumerate(matrix[i + 1]) if c == -1]
+        for b in beams:
+            if b in next_blocks:
+                next_counts[b-1] += counts[b]
+                next_counts[b+1] += counts[b]
+            else:
+                next_counts[b]+=counts[b]
+        counts=next_counts
+    return sum(counts)
 
 
 def main():
-    text = Path("test07.txt").read_text()
+    text = Path("input07.txt").read_text()
     lines = text.splitlines()
     if debug:
         print(lines)
     print("Part1:", part1(lines))
+    print("Part2:", part2(lines))
 
 
 if __name__ == "__main__":
