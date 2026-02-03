@@ -80,7 +80,7 @@ def find_groups(connections):
     return groups
 
 
-def part1(lines: list[int], top: int) -> int:
+def part1(lines, top) -> int:
     matrix = parse_matrix(lines)
     pairs = closest_pairs(matrix, top)
     connected = find_connections(pairs)
@@ -89,10 +89,70 @@ def part1(lines: list[int], top: int) -> int:
     return math.prod(lengths[0:3])
 
 
+class SimpleUF:
+    def __init__(self, n):
+        # each box starts in its own circuit
+        self.parent = list(range(n))
+        self.components = n
+
+    def find(self, x):
+        # walk up until you reach the circuit leader
+        while self.parent[x] != x:
+            x = self.parent[x]
+        return x
+
+    def union(self, a, b):
+        ra = self.find(a)
+        rb = self.find(b)
+
+        # already connected
+        if ra == rb:
+            return False
+
+        # connect rb's circuit into ra's circuit
+        self.parent[rb] = ra
+        self.components -= 1
+        return True
+
+
+def last_connection_product(points):
+    n = len(points)
+
+    # build all edges (distance, i, j)
+    edges = []
+    for i in range(n):
+        x1, y1, z1 = points[i]
+        for j in range(i + 1, n):
+            x2, y2, z2 = points[j]
+            dx, dy, dz = x1 - x2, y1 - y2, z1 - z2
+            d2 = dx * dx + dy * dy + dz * dz
+            edges.append((d2, i, j))
+
+    edges.sort()
+
+    uf = SimpleUF(n)
+    last_i = last_j = None
+
+    for _, i, j in edges:
+        if uf.union(i, j):
+            last_i, last_j = i, j
+            if uf.components == 1:
+                break
+
+    return points[last_i][0] * points[last_j][0]
+
+
+def part2(lines) -> int:
+    matrix = parse_matrix(lines)
+    last_product = last_connection_product(matrix)
+    return last_product
+
+
 def main():
     text = Path("input08.txt").read_text()
     lines = text.splitlines()
     print("Part1:", part1(lines, 1000))
+    print("Part2:", part2(lines))
 
 
 if __name__ == "__main__":
